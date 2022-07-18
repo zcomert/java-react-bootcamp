@@ -6,9 +6,9 @@ body{
 #root{
     
     width: 500px;
-    height: 100vh;
     border:2px solid #fafafa;
     background-color: rgb(245, 245, 255);
+    box-shadow: 15px 15px #6e6e6e;
 }
 
 p{
