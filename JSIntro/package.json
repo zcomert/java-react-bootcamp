@@ -2,16 +2,18 @@
   "name": "javareactbootcamp",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "start":"node index.js",
-    "server":"live-server",
+    "start": "node index.js",
+    "server": "live-server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "live-server": "^1.2.2"
+    "live-server": "^1.2.2",
+    "lodash": "^4.17.21"
   }
 }

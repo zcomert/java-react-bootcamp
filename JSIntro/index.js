@@ -7,4 +7,6 @@ names.map(name => {
     root.append(element);
     console.log(name);
 })
-console.log(names);  
+
+
+
