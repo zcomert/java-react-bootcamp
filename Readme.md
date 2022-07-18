@@ -10,6 +10,3 @@ Kapımızın ilk gününde değindiğimiz konular:
 - lodash
 - json-server
 - node-fetch
-
-
-
