@@ -1,6 +1,5 @@
-const names = ["Ahmet","Erdi","Hüseyin"];
+const names = ["Ahmet","Erdi","Hüseyin", "Can","Merve"];
 const root = document.getElementById("root");
-root.innerHTML = "DOM Manipülasyonu."
 
 names.map(name => {
     let element = document.createElement("p");

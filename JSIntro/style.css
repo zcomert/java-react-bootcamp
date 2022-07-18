@@ -1,0 +1,27 @@
+body{
+    font-family: 'Roboto', sans-serif;
+    font-size: 26px;
+}
+
+#root{
+    
+    width: 500px;
+    height: 100vh;
+    border:2px solid #fafafa;
+    background-color: rgb(245, 245, 255);
+}
+
+p{
+    background-color: #fafafa;
+    padding: 20px;
+    border-top: 1px solid #f1f1f1;
+}
+
+p:hover{
+    background-color: antiquewhite;
+    cursor:pointer;
+}
+
+p:nth-child(odd){
+    background-color: rgb(223, 251, 195);
+}
