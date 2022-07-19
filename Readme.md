@@ -22,3 +22,6 @@ Kapımızın ilk gününde değindiğimiz konular:
 - rest
 - destructing 
 - style
+- state
+- useState Hook
+- Template literal 

@@ -5,11 +5,11 @@ import React from "react";
 export default function Employee({ employee, ...props }) {
   
    // destructuring
-  const { firstName, lastName, age, ...other } = employee;
-
+  const { id, firstName, lastName, age, ...other } = employee;
+  // const url = "./images/"+id+".jpg";
   return (
     <article className="person">
-      <img src="./images/1.jpg" alt={firstName} />
+      <img src={`./images/${id}.jpg`} alt={firstName} />
       <div>
         <h4>{firstName} {lastName}</h4>
         <p>{age} years old.</p>
