@@ -8,14 +8,12 @@ export default function Employee({ employee, ...props }) {
   const { firstName, lastName, age, ...other } = employee;
 
   return (
-    <div>
-      <h3>
-        {firstName}
-        <span> </span>
-        {lastName}
-        <span> </span>
-        {age}
-      </h3>
-    </div>
+    <article className="person">
+      <img src="./images/1.jpg" alt={firstName} />
+      <div>
+        <h4>{firstName} {lastName}</h4>
+        <p>{age} years old.</p>
+      </div>
+    </article>
   );
 }
