@@ -24,4 +24,5 @@ Kapımızın ilk gününde değindiğimiz konular:
 - style
 - state
 - useState Hook
+- useEffect Hook
 - Template literal 
