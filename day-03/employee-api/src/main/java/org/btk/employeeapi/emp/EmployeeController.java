@@ -1,6 +1,5 @@
 package org.btk.employeeapi.emp;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -61,26 +59,23 @@ public class EmployeeController {
             emp.setLastName(employee.getLastName());
             return employeeRepository.save(emp);
         }
-
         throw new RuntimeException("Employe is not exists!");
     }
 
-    // ./employees/id
+    // ./api/employees/id
     @DeleteMapping("/{id}")
     public void deleteEmployee(@PathVariable("id") int id) {
         employeeRepository.deleteById(id);
     }
 
-    // [DELETE]./employees?id={id}
+    // [DELETE]./api/employees?id={id}
     @DeleteMapping
     public void deletedEmployee(@RequestParam(name = "id") int id) {
         Employee emp = employeeRepository.findById(id).orElse(null);
-
         if (emp != null) {
             employeeRepository.delete(emp);
             return;
         }
         throw new RuntimeException("Employee could not found");
     }
-
 }
