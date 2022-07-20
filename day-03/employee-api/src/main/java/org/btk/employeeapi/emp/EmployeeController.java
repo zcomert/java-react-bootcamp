@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,8 +50,9 @@ public class EmployeeController {
         throw new RuntimeException(String.format("Employee with %s id could not found.", id));
     }
 
-    @PutMapping
-    public Employee updateOneEmployee(int id, Employee employee) {
+    @PutMapping("/{id}")
+    public Employee updateOneEmployee(@PathVariable(name = "id", required = true) int id,
+            @RequestBody Employee employee) {
         Employee emp = employeeRepository.findById(id).orElse(null);
 
         if (emp != null) {
@@ -59,12 +61,15 @@ public class EmployeeController {
             return employeeRepository.save(emp);
         }
 
-        throw new RuntimeException("Error!");
+        throw new RuntimeException("Employe is not exists!");
     }
 
+    // ./employees/id
     @DeleteMapping("/{id}")
-    public void deleteEmployee(@PathVariable("id")  int id){
-        repository.deleteById(id);
+    public void deleteEmployee(@PathVariable("id") int id) {
+        employeeRepository.deleteById(id);
     }
+
+    // [DELETE]./employees?id={id}
 
 }
