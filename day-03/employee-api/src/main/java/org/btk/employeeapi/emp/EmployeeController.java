@@ -71,5 +71,15 @@ public class EmployeeController {
     }
 
     // [DELETE]./employees?id={id}
+       @DeleteMapping
+    public void deletedEmployee(@RequestParam(name="id") int id){
+        Employee emp = employeeRepository.findById(id).orElse(null);
+
+        if(emp!=null){
+            employeeRepository.delete(emp);
+            return;
+        }
+        throw new RuntimeException("Employee could not found");
+    }
 
 }
