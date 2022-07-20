@@ -1,7 +1,6 @@
 # Java React Bootcamp
-
+## BTK Akademi ve İnnova Organizasyonu   
 ## 1. Gün
-Kapımızın ilk gününde değindiğimiz konular: 
 - NodeJS
 - npm
 - JavaScript (ES6)
@@ -24,4 +23,5 @@ Kapımızın ilk gününde değindiğimiz konular:
 - style
 - state
 - useState Hook
+- useEffect Hook
 - Template literal 
