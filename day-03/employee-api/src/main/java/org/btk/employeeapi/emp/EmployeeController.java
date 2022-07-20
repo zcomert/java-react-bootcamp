@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -46,6 +47,19 @@ public class EmployeeController {
             return emp.get();
         }
         throw new RuntimeException(String.format("Employee with %s id could not found.", id));
+    }
+
+    @PutMapping
+    public Employee updateOneEmployee(int id, Employee employee) {
+        Employee emp = employeeRepository.findById(id).orElse(null);
+
+        if (emp != null) {
+            emp.setFirstName(employee.getFirstName());
+            emp.setLastName(employee.getLastName());
+            return employeeRepository.save(emp);
+        }
+
+        throw new RuntimeException("Error!");
     }
 
 }
