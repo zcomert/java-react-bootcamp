@@ -70,6 +70,11 @@ public class EmployeeController {
         employeeRepository.deleteById(id);
     }
 
+     @DeleteMapping("")
+    public void deleteEmployee(@RequestParam int id) {
+        employeeRepository.deleteById(id);
+    }
+
     // [DELETE]./employees?id={id}
 
 }
