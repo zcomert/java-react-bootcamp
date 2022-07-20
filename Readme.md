@@ -25,3 +25,19 @@
 - useState Hook
 - useEffect Hook
 - Template literal 
+
+## 3. Gün
+- JavaSpring Boot
+- @SpringBootApplication
+- @RestController
+- @RequestMapping
+  - GetMapping
+  - PostMapping
+  - PutMapping
+  - DeleteMapping
+- JPA Repository
+- Embedded SQL Databases
+  - HyperSQL Database
+- Dependency Injection (DI)
+  - Constructor Injection
+  - Setter Injection
