@@ -62,4 +62,9 @@ public class EmployeeController {
         throw new RuntimeException("Error!");
     }
 
+    @DeleteMapping("/{id}")
+    public void deleteEmployee(@PathVariable("id")  int id){
+        repository.deleteById(id);
+    }
+
 }
