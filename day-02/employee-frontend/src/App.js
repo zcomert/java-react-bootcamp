@@ -4,7 +4,7 @@ import List from "./List";
 import "./style.css";
 
 function App() {
-
+  
   const getData = async () => {
    
     try {
@@ -19,14 +19,14 @@ function App() {
 
   useEffect(() => {
     getData();
-  },[])
+  }, []);
 
   const [employees, setEmployees] = useState(names);
   const [isLoading, setIsLoading] = useState(true);
 
   const body = (
     <main>
-      <section className="container">
+      <section className='container'>
         <List names={employees} />
         <button
           onClick={() => {
@@ -41,17 +41,13 @@ function App() {
 
   const loading = (
     <main>
-      <section className="container">
+      <section className='container'>
         <h1>Loading...</h1>
       </section>
     </main>
   );
 
-  return (
-    <>
-      {isLoading ? body : loading}
-    </>
-  );
+  return <>{isLoading ? body : loading}</>;
 }
 
 export default App;
