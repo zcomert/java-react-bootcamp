@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 // ./api/employees
@@ -71,11 +72,11 @@ public class EmployeeController {
     }
 
     // [DELETE]./employees?id={id}
-       @DeleteMapping
-    public void deletedEmployee(@RequestParam(name="id") int id){
+    @DeleteMapping
+    public void deletedEmployee(@RequestParam(name = "id") int id) {
         Employee emp = employeeRepository.findById(id).orElse(null);
 
-        if(emp!=null){
+        if (emp != null) {
             employeeRepository.delete(emp);
             return;
         }
