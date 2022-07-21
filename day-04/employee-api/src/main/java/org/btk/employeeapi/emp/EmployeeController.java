@@ -30,8 +30,10 @@ public class EmployeeController {
 
     }
 
+    // HttpEntity (super class)
+    // ResponseEntity / RequestEntity (subclasses)
     @GetMapping
-    public ResponseEntity<List<Employee>> getAllEmployees() {
+    public HttpEntity<List<Employee>> getAllEmployees() {
         List<Employee> list = employeeRepository.findAll();
         return new ResponseEntity<List<Employee>>(list, HttpStatus.OK);
     }
