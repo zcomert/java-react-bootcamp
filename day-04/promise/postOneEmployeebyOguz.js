@@ -3,7 +3,7 @@ import fetch from "node-fetch";
 const url = "http://localhost:8080/api/employees/add";
 const body = { firstName: "Oğuz", lastName: "Bilgin" };
 
-const response = async () => {
+const postOneEmployee = async () => {
   await fetch(url, {
     method: "POST",
     body: JSON.stringify(body),
@@ -12,5 +12,4 @@ const response = async () => {
     },
   }).then((resp) => resp.json());
 };
-
 console.log(response);
