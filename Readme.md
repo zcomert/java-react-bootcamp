@@ -42,7 +42,7 @@
   - Constructor Injection
   - Setter Injection
 
-## 4. GÜN
+## 4. Gün
 - Http Headers
 - Http Body
 - HttpEntity<T>
@@ -57,12 +57,12 @@
   - Creating a fork
   - Creating and publishing API documents
 - Promise 
-- fetch
+- Http Requests fetch with **fetch-api**
   - get request
   - post request
   - put request
   - delete request
-- axios
+- Http Requests with **axios-api**
   - get request
   - post request
   - put request

@@ -15,25 +15,21 @@ const getOneEmployee = async (id) => {
 
 const postOneEmployee = async (body) => {
   const url = "http://localhost:8080/api/employees";
-  const { status, data } = await axios
-                                .post(url, body)
-                                .then((resp) => resp);
+  const { status, data } = await axios.post(url, body).then((resp) => resp);
   return { status, data };
 };
 
 const putOneEmployee = async (id, body) => {
-    const url = `http://localhost:8080/api/employees/${id}`;
-    const {status, data} = await axios
-                                .put(url, body)
-                                .then(resp => resp)
-    return {status, data};
-}
+  const url = `http://localhost:8080/api/employees/${id}`;
+  const { status, data } = await axios.put(url, body).then((resp) => resp);
+  return { status, data };
+};
 
-const deleteOneEmployee = async(id) => {
-    const url = `http://localhost:8080/api/employees/${id}`;
-    const {status} = await axios.delete(url).then(resp => resp);
-    return {status};
-}
+const deleteOneEmployee = async (id) => {
+  const url = `http://localhost:8080/api/employees/${id}`;
+  const { status } = await axios.delete(url).then((resp) => resp);
+  return { status };
+};
 
 // const result = await getAllEmployees();
 // const result = await getOneEmployee(3);
