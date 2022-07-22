@@ -9,7 +9,7 @@ import Avatar from "@mui/material/Avatar";
 import ImageIcon from "@mui/icons-material/Image";
 import WorkIcon from "@mui/icons-material/Work";
 import BeachAccessIcon from "@mui/icons-material/BeachAccess";
-import { IconButton } from "@mui/material";
+import { Grid, IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function EmployeeList({ employees, setRefresh, refresh }) {
@@ -24,38 +24,34 @@ export default function EmployeeList({ employees, setRefresh, refresh }) {
   };
 
   return (
-    <>
-      <div>EmployeeList {employees.length}</div>
-
-      <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
-        {employees.map((emp) => (
-          <div key={emp.id}>
-            <ListItem
-              secondaryAction={
-                <IconButton
-                  edge='end'
-                  aria-label='delete'
-                  onClick={() => handleDelete(emp.id)}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              }
+    <List sx={{ width: "100%", bgcolor: "background.paper" }}>
+      {employees.map((emp) => (
+        <ListItem
+          key={emp.id}
+          secondaryAction={
+            <IconButton
+              edge='end'
+              aria-label='delete'
+              onClick={() => handleDelete(emp.id)}
             >
-              <ListItemAvatar>
-                <Avatar 
-                src={`images/${emp.id}.jpg`}
-                alt={`${emp.firstName} ${emp.lastName}`}>
-                  <ImageIcon />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText
-                primary={`${emp.firstName} ${emp.lastName}`}
-                secondary='Jan 9, 2014'
-              />
-            </ListItem>
-          </div>
-        ))}
-      </List>
-    </>
+              <DeleteIcon />
+            </IconButton>
+          }
+        >
+          <ListItemAvatar>
+            <Avatar
+              src={`images/${emp.id}.jpg`}
+              alt={`${emp.firstName} ${emp.lastName}`}
+            >
+              <ImageIcon />
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText
+            primary={`${emp.firstName} ${emp.lastName}`}
+            secondary='Jan 9, 2014'
+          />
+        </ListItem>
+      ))}
+    </List>
   );
 }

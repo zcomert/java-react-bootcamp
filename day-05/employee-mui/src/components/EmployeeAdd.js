@@ -1,3 +1,4 @@
+import { Button, Stack, TextField } from '@mui/material';
 import React, {useState} from 'react'
 import EmployeeService from '../services/EmployeeService'
 
@@ -34,21 +35,21 @@ export default function EmployeeAdd({setRefresh, refresh}) {
 
   return (
     <div>
-    
-     <input name="firstName" 
+    <Stack direction="column" spacing={2} sx={{m:2}}>
+     
+     <TextField name="firstName" 
      onChange={(e) => onFirstNameChange(e)}
      placeholder='firstName' />
-     
-     <input name="lastName" 
+
+     <TextField name="lastName" 
      onChange = {(e) => onLastNameChange(e)} 
      placeholder='lastName' 
      />
-
-     <button onClick={() => handleAdd()} >Add </button>
-     <div>
-      {firstName} {lastName}
-     </div>
-
+     
+     <Button variant='contained' onClick={() => handleAdd()} >Add </Button>
+    
+    </Stack>
+     
     </div>
   )
 }
