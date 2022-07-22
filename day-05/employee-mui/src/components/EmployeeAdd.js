@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import EmployeeService from '../services/EmployeeService'
 
-export default function EmployeeAdd() {
+export default function EmployeeAdd({setRefresh, refresh}) {
   
   const employeeService = new EmployeeService();
   
@@ -16,7 +16,7 @@ export default function EmployeeAdd() {
 
     employeeService.postOneEmployee(employee).then(resp => {
       console.log(resp);
-      
+      setRefresh(!refresh);
     })
 
     console.log(employee);

@@ -24,7 +24,9 @@ function App() {
         employees={employees} 
         setRefresh = {setRefresh}
         refresh = {refresh} />
-      <EmployeeAdd />
+      
+      <EmployeeAdd setRefresh = {setRefresh}
+        refresh = {refresh}  />
     </div>
   );
 }
