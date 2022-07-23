@@ -67,3 +67,11 @@
   - post request
   - put request
   - delete request
+  
+## 5. Gün
+- React project organization
+- Defining components in React
+- Defining services in React
+- Consuming APIs in React
+- UI Frameworks 
+- Getting Starting with MUI 
