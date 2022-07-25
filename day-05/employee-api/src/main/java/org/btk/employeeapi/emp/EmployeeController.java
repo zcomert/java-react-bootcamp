@@ -88,4 +88,13 @@ public class EmployeeController {
         }
         throw new RuntimeException("Employee could not found");
     }
+
+    // localhost/api/employees/search?q=...
+    @GetMapping(path = "/search")
+    public ResponseEntity<Object> searchByFirstName(@RequestParam(name = "q", required = true) String q) {
+
+        List<Employee> list = employeeRepository.findAllByFirstNameContainingIgnoreCase(q);
+
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
 }

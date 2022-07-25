@@ -19,7 +19,11 @@ function App() {
     <Grid fluid>
       <Grid item>
         <Topmenu />
-        <Search />
+        <Search
+        setEmployees={setEmployees}
+        setRefresh={setRefresh}
+        refresh={refresh}
+        />
         <Grid container>
           <Grid item xs={8}>
             <EmployeeList

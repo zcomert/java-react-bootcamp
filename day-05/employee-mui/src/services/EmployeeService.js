@@ -21,6 +21,14 @@ class EmployeeService{
         .then(resp=> resp);
         return {status,data};
     }
+
+    async getSearch(q){
+        const url = `${this.baseUrl}/search?q=${q}`;
+        const {status, data} = await axios.get(url)
+        .then(resp => resp)
+        .catch(err => console.error(err));
+        return {status, data};
+    }
 }
 
 export default EmployeeService;
