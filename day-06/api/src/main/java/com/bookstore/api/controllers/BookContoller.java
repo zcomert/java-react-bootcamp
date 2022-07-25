@@ -1,8 +1,13 @@
 package com.bookstore.api.controllers;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bookstore.api.entities.Book;
+import com.bookstore.api.entities.models.ApiResponse;
+import com.bookstore.api.exceptions.notFoundExceptions.BookNotFoundException;
 import com.bookstore.api.repositories.BookRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -31,31 +38,63 @@ public class BookContoller {
     }
 
     @GetMapping
-    public List<Book> getAllBooks() {
-        return bookRepository.findAll();
+    public HttpEntity<?> getAllBooks() {
+        List<Book> list = bookRepository.findAll();
+        var response = ApiResponse.builder()
+                .httpStatus(HttpStatus.OK)
+                .statusCode(HttpStatus.OK.value())
+                .message("Operation is OK.")
+                .timestamp(new Timestamp(new Date().getTime()))
+                .data(list)
+                .build();
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping
-    public Book postOneBook(@RequestBody Book book) {
-        return bookRepository.save(book);
+    public ResponseEntity<?> postOneBook(@RequestBody Book book) {
+        Book bookAdded = bookRepository.save(book);
+
+        var response = ApiResponse.builder()
+                .httpStatus(HttpStatus.CREATED)
+                .statusCode(HttpStatus.CREATED.value())
+                .message("Operation is OK")
+                .timestamp(new Timestamp(new Date().getTime()))
+                .data(bookAdded)
+                .build();
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PutMapping(path = "/{id}")
-    public Book putOneBook(@PathVariable(name = "id", required = true) int id, @RequestBody Book book) {
-        Optional<Book> bookOpt = bookRepository.findById(id);
-        if (bookOpt.isPresent()) {
-            book.setId(id);
-            return bookRepository.save(book);
-        }
-        throw new RuntimeException(String.format("Book %s id coluld not found.", id));
+    public ResponseEntity<?> putOneBook(@PathVariable(name = "id", required = true) int id, @RequestBody Book book) {
+
+        bookRepository
+                .findById(id)
+                .orElseThrow(() -> new BookNotFoundException(id));
+
+        book.setId(id);
+        bookRepository.save(book);
+
+        var response = ApiResponse.builder()
+                .httpStatus(HttpStatus.ACCEPTED)
+                .statusCode(HttpStatus.ACCEPTED.value())
+                .message("Operation is OK")
+                .timestamp(new Timestamp(new Date().getTime()))
+                .data(book)
+                .build();
+
+        return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+
     }
 
     @DeleteMapping(path = "/{id}")
-    public Book deleteOneBook(@PathVariable int id) {
-        Book book = bookRepository.findById(id).orElse(null);
-        if (book != null) {
-            bookRepository.delete(book);
-        }
-        throw new RuntimeException(String.format("Book with %s id could not found.", id));
+    public ResponseEntity<?> deleteOneBook(@PathVariable int id) {
+        Book book = bookRepository
+                .findById(id)
+                .orElseThrow(() -> new BookNotFoundException(id));
+
+        bookRepository.delete(book);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

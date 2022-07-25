@@ -74,4 +74,16 @@
 - Defining services in React
 - Consuming APIs in React
 - UI Frameworks 
-- Getting Starting with MUI 
+- Getting Starting with MUI
+
+## 6. Gün
+- Search implementation for `employee-api` is done.
+- Design Patterns Overview
+- Builder Design Pattern
+- SuperBuilder 
+- `bookstore-api`
+- ApiResponse Model
+- Inheritance
+- NotFoundException
+  - BookNotFoundException
+  - CategoryNotFoundException
