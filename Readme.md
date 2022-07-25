@@ -78,6 +78,11 @@
 
 ## 6. Gün
 - Search implementation for `employee-api` is done.
+- Logging in Spring Boot
+  - Best practices
+  - Logback
+  - Logger
+  - Slf4j
 - Design Patterns Overview
 - Builder Design Pattern
 - SuperBuilder 
