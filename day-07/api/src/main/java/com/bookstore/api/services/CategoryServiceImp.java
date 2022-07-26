@@ -15,7 +15,6 @@ import com.bookstore.api.services.Abstract.CategoryService;
 public class CategoryServiceImp implements CategoryService {
     private final CategoryRepository categoryRepository;
 
-    @Autowired
     public CategoryServiceImp(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
@@ -35,7 +34,9 @@ public class CategoryServiceImp implements CategoryService {
 
     @Override
     public ApiResponse<Category> getOneCategory(int id) {
-        Category category = categoryRepository.findById(id).orElseThrow(() -> new CategoryNotFoundException(id));
+        Category category = categoryRepository
+        .findById(id)
+        .orElseThrow(() -> new CategoryNotFoundException(id));
         return ApiResponse.default_OK(category);
     }
 

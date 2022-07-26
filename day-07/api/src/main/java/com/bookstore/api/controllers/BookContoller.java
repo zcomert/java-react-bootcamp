@@ -34,6 +34,12 @@ public class BookContoller {
                 .body(bookService.getAllBook());
     }
 
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<?> getOneBook(@PathVariable(name = "id", required = true) int id) {
+        var response = bookService.getOneBook(id);
+        return new ResponseEntity<>(response, response.getHttpStatus());
+    }
+
     @PostMapping
     public ResponseEntity<?> postOneBook(@RequestBody Book book) {
         var response = bookService.postOneBook(book);

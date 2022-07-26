@@ -11,7 +11,6 @@ import lombok.experimental.SuperBuilder;
 @Data
 @SuperBuilder
 @AllArgsConstructor
-@NoArgsConstructor
 public class ApiResponse<T> {
     private HttpStatus httpStatus;
     private int statusCode;
@@ -19,11 +18,16 @@ public class ApiResponse<T> {
     private T data;
     private Timestamp timestamp;
 
-    public ApiResponse(T data) {
+    public ApiResponse() {
+        super();
+        this.setTimestamp(ResponseMessage.timestamp);
         this.setHttpStatus(HttpStatus.OK);
         this.setStatusCode(HttpStatus.OK.value());
         this.setMessage(ResponseMessage.success);
-        this.setTimestamp(ResponseMessage.timestamp);
+    }
+
+    public ApiResponse(T data) {
+        this();
         this.setData(data);
     }
 
