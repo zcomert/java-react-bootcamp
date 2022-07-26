@@ -9,4 +9,9 @@ public interface BookService {
     ApiResponse<List<Book>> getAllBook();
 
     ApiResponse<Book> getOneBook(int id);
+
+    ApiResponse<Book> postOneBook(Book book);
+
+    ApiResponse<Book> putOneBook(int id, Book book);
+    void deleteOneBook(int id);
 }

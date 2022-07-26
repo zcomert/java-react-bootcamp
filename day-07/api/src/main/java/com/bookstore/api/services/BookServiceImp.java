@@ -35,4 +35,25 @@ public class BookServiceImp implements BookService {
 
         return ApiResponse.default_OK(book);
     }
+
+    @Override
+    public ApiResponse<Book> postOneBook(Book book) {
+        Book bookAdd = bookRepository.save(book);
+        return ApiResponse.default_CREATED(bookAdd);
+    }
+
+    @Override
+    public ApiResponse<Book> putOneBook(int id, Book book) {
+        // Book var mı?
+        getOneBook(id); // yoksa hata fırlatır!
+        book.setId(id);
+        return ApiResponse.default_ACCEPTED(bookRepository.save(book));
+    }
+
+    @Override
+    public void deleteOneBook(int id) {
+        // getOneBook(id); // kitap yoksa hata fırlatır.
+        // bookRepository.deleteById(id);
+        bookRepository.delete(getOneBook(id).getData());
+    }
 }

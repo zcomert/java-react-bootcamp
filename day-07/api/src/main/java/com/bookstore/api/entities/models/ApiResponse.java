@@ -1,7 +1,6 @@
 package com.bookstore.api.entities.models;
 
 import java.sql.Timestamp;
-
 import org.springframework.http.HttpStatus;
 
 import lombok.AllArgsConstructor;
@@ -11,8 +10,8 @@ import lombok.experimental.SuperBuilder;
 
 @Data
 @SuperBuilder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class ApiResponse<T> {
     private HttpStatus httpStatus;
     private int statusCode;
@@ -20,24 +19,37 @@ public class ApiResponse<T> {
     private T data;
     private Timestamp timestamp;
 
-    public static <T> ApiResponse<T> default_OK(T data){
-        ApiResponse<T> response = new ApiResponse<>();
-        response.setHttpStatus(HttpStatus.OK);
-        response.setStatusCode(HttpStatus.OK.value());
-        response.setMessage(ResponseMessage.success);
-        response.setData(data);
-        response.setTimestamp(ResponseMessage.timestamp);
+    public ApiResponse(T data) {
+        this.setHttpStatus(HttpStatus.OK);
+        this.setStatusCode(HttpStatus.OK.value());
+        this.setMessage(ResponseMessage.success);
+        this.setTimestamp(ResponseMessage.timestamp);
+        this.setData(data);
+    }
+
+    public static <T> ApiResponse<T> default_OK(T data) {
+        ApiResponse<T> response = new ApiResponse<>(data);
         return response;
     }
 
-    public static <T> ApiResponse<T> default_CREATED(T data){
-        ApiResponse<T> response = new ApiResponse<>();
+    public static <T> ApiResponse<T> default_CREATED(T data) {
+        ApiResponse<T> response = new ApiResponse<>(data);
         response.setHttpStatus(HttpStatus.CREATED);
         response.setStatusCode(HttpStatus.CREATED.value());
-        response.setMessage(ResponseMessage.success);
-        response.setData(data);
-        response.setTimestamp(ResponseMessage.timestamp);
         return response;
     }
 
+    public static <T> ApiResponse<T> default_ACCEPTED(T data) {
+        ApiResponse<T> response = new ApiResponse<>(data);
+        response.setHttpStatus(HttpStatus.ACCEPTED);
+        response.setStatusCode(HttpStatus.ACCEPTED.value());
+        return response;
+    }
+
+    public static <T> ApiResponse<T> default_NO_CONTENT(T data) {
+        ApiResponse<T> response = new ApiResponse<>(data);
+        response.setHttpStatus(HttpStatus.NO_CONTENT);
+        response.setStatusCode(HttpStatus.NO_CONTENT.value());
+        return response;
+    }
 }
