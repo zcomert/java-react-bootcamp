@@ -15,6 +15,6 @@ public interface CategoryService {
 
     ApiResponse<Category> putOneCategory(int id, Category category);
 
-    ApiResponse<Category> deleteCategory(int id);
+    void deleteCategory(int id);
 
 }
