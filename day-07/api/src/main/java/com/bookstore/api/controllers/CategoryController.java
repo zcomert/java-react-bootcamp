@@ -18,75 +18,38 @@ import com.bookstore.api.entities.models.ApiResponse;
 import com.bookstore.api.entities.models.ResponseMessage;
 import com.bookstore.api.exceptions.notFoundExceptions.CategoryNotFoundException;
 import com.bookstore.api.repositories.CategoryRepository;
+import com.bookstore.api.services.Abstract.CategoryService;
 
 @RestController
 @RequestMapping("api/v1/categories")
 public class CategoryController {
-    private final CategoryRepository categoryRepository;
 
-    public CategoryController(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
+    private final CategoryService categoryService;
+
+    public CategoryController(CategoryService categoryService) {
+        this.categoryService = categoryService;
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllCategories() {
-        List<Category> list = categoryRepository.findAll();
-
-        var response = ApiResponse
-                .builder()
-                .httpStatus(HttpStatus.OK)
-                .statusCode(HttpStatus.OK.value())
-                .message(ResponseMessage.success)
-                .data(list)
-                .timestamp(ResponseMessage.timestamp)
-                .build();
-
-        return new ResponseEntity<>(response, response.getHttpStatus());
+    public ApiResponse<List<Category>> getAllCategories() {
+        return categoryService.getAllCategories();
     }
 
     @PostMapping
     public ResponseEntity<?> postOneCategory(@RequestBody Category category) {
-        Category categoryAdded = categoryRepository.save(category);
-
-        var response = ApiResponse
-                .builder()
-                .httpStatus(HttpStatus.CREATED)
-                .statusCode(HttpStatus.CREATED.value())
-                .message(ResponseMessage.success)
-                .data(categoryAdded)
-                .timestamp(ResponseMessage.timestamp)
-                .build();
-
+        var response = categoryService.postOneCategory(category);
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> putOneCategory(@PathVariable(name = "id") int id, @RequestBody Category category) {
-
-        categoryRepository.findById(id)
-                .orElseThrow(() -> new CategoryNotFoundException(id));
-
-        category.setId(id);
-        categoryRepository.save(category);
-
-        var response = ApiResponse
-                .builder()
-                .httpStatus(HttpStatus.CREATED)
-                .statusCode(HttpStatus.CREATED.value())
-                .message(ResponseMessage.success)
-                .data(category)
-                .timestamp(ResponseMessage.timestamp)
-                .build();
-
+        var response = categoryService.putOneCategory(id, category);
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteOneCategory(@PathVariable(name = "id") int id) {
-        
-        Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new CategoryNotFoundException(id));
-        categoryRepository.delete((category));
+    public ResponseEntity<Void> deleteOneCategory(@PathVariable(name = "id") int id) {
+        categoryService.deleteCategory(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
