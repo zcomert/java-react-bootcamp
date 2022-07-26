@@ -92,3 +92,15 @@
 - NotFoundException
   - BookNotFoundException
   - CategoryNotFoundException
+
+## 7. Gün
+- n-Tier Architecture
+- SOLID
+- Service Layer Implementation
+- Abstaction
+- ApiResponse Design
+- ApiErrorResponse Design
+- Controller-based Error Handling
+  - @ExceptionHandler
+- Global Error Handling
+  - @ControllerAdvice
