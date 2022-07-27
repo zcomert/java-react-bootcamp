@@ -1,5 +1,6 @@
 package com.bookstore.api.services;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -57,15 +58,10 @@ public class AuthorServiceImp implements AuthorService {
 
     @Override
     public Set<Author> getAuthorsByIds(List<Integer> authorIds) {
-        // Set oluştur. Örneğin HashSet
-
-        // List<Integer> authorIds için döngü aç.
-
-        // Döngü içinde her bir yazarı çek ve set'e ekle
-
-        // Oluşan seti dön. 
-        
-        return null;
+        Set<Author> authors = new HashSet<>();
+        authorIds
+                .forEach(id -> authors.add(getOneAuthor(id).getData()));
+        return authors;
     }
 
 }
