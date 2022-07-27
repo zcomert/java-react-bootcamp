@@ -1,10 +1,19 @@
 package com.bookstore.api.entities;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,4 +32,9 @@ public class Category {
 
     @Column(name = "category_name")
     private String categoryName;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "category")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Set<Book> books;
 }

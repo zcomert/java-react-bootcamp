@@ -28,9 +28,6 @@ public class Book {
     private int id;
 
     @Column(name = "title")
-    @NotBlank(message = "Title cannot be blank.")
-    @NotNull(message = "Title cannot be null.")
-    @Size(min = 3, message = "Title must contains at least 3 characters.")
     private String title;
 
     @ManyToOne
