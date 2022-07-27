@@ -104,3 +104,17 @@
   - @ExceptionHandler
 - Global Error Handling
   - @ControllerAdvice
+
+## 8. Gün
+- Validation in Spring Boot
+- MethodArgumentNotValidException Implementation (Global)
+  
+- CrudRepository
+- PagingAndSortingRepository
+- JpaRepository
+
+- OneToOne relation
+- OneToMany relation
+- ManyToMany relation
+
+- @RequiredArgsConstructor
