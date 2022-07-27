@@ -1,6 +1,7 @@
 package com.bookstore.api.services;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
@@ -52,6 +53,12 @@ public class AuthorServiceImp implements AuthorService {
     public void deleteOneAuthor(int id) {
         getOneAuthor(id);
         authorRepository.deleteById(id);
+    }
+
+    @Override
+    public Set<Author> getAuthorsByIds(List<Integer> authorIds) {
+        
+        return null;
     }
 
 }

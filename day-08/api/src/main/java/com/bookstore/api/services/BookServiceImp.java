@@ -1,18 +1,20 @@
 package com.bookstore.api.services;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.bookstore.api.entities.Author;
 import com.bookstore.api.entities.Book;
 import com.bookstore.api.entities.Category;
 import com.bookstore.api.entities.models.ApiResponse;
-import com.bookstore.api.entities.models.ResponseMessage;
 import com.bookstore.api.entities.requests.BookRequestForPost;
 import com.bookstore.api.entities.requests.BookRequestForPut;
 import com.bookstore.api.exceptions.notFoundExceptions.BookNotFoundException;
 import com.bookstore.api.repositories.BookRepository;
+import com.bookstore.api.services.Abstract.AuthorService;
 import com.bookstore.api.services.Abstract.BookService;
 import com.bookstore.api.services.Abstract.CategoryService;
 
@@ -21,11 +23,15 @@ public class BookServiceImp implements BookService {
 
     private final BookRepository bookRepository; // IoC
     private final CategoryService categoryService;
+    private final AuthorService authorService;
 
-    public BookServiceImp(BookRepository bookRepository, CategoryService categoryService) {
+
+    public BookServiceImp(BookRepository bookRepository, CategoryService categoryService, AuthorService authorService) {
         this.bookRepository = bookRepository;
         this.categoryService = categoryService;
+        this.authorService = authorService;
     }
+   
 
     @Override
     public ApiResponse<List<Book>> getAllBook() {
@@ -47,6 +53,10 @@ public class BookServiceImp implements BookService {
         // BookRequestForPost -> Book (entity)
         Category category = categoryService
                 .getOneCategory(bookRequestForPost.getCategoryId()).getData();
+
+        // Set<Author> ...  authorServie.x(authorIds)
+
+        Set<Author> authors = authorService.getAuthorsByIds(bookRequestForPost.getAuthorIds());
 
         Book book = new Book();
         book.setTitle(bookRequestForPost.getTitle());

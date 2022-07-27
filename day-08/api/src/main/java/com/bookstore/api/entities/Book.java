@@ -1,16 +1,18 @@
 package com.bookstore.api.entities;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -34,4 +36,11 @@ public class Book {
     @JoinColumn(name = "category_id")
     private Category category; // navigation property
     // private int categoryId;
+
+    @ManyToMany
+    @JoinTable(
+        name = "bookauthors", 
+        joinColumns = @JoinColumn(name = "book_id"), 
+        inverseJoinColumns = @JoinColumn(name = "author_id"))
+    private Set<Author> bookAuthors;
 }

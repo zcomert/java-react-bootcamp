@@ -13,10 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bookstore.api.entities.Book;
 import com.bookstore.api.entities.requests.BookRequestForPost;
 import com.bookstore.api.entities.requests.BookRequestForPut;
-import com.bookstore.api.repositories.BookRepository;
 import com.bookstore.api.services.Abstract.BookService;
 
 @RestController
