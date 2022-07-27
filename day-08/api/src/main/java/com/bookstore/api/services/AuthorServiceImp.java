@@ -2,12 +2,15 @@ package com.bookstore.api.services;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.bookstore.api.entities.Author;
 import com.bookstore.api.entities.models.ApiResponse;
 import com.bookstore.api.exceptions.notFoundExceptions.AuthorNotFoundException;
 import com.bookstore.api.repositories.AuthorRepository;
 import com.bookstore.api.services.Abstract.AuthorService;
 
+@Service
 public class AuthorServiceImp implements AuthorService {
 
     private final AuthorRepository authorRepository;
