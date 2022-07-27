@@ -57,8 +57,9 @@ public class AuthorServiceImp implements AuthorService {
 
     @Override
     public Set<Author> getAuthorsByIds(List<Integer> authorIds) {
-        
-        return null;
+        Set<Author> authors = new HashSet<>();
+        ids.forEach( id -> authors.add(getOneAuthor(id).getData()));
+        return authors;
     }
 
 }
