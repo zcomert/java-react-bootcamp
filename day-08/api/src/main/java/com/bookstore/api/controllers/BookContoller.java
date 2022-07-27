@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bookstore.api.entities.Book;
 import com.bookstore.api.entities.requests.BookRequestForPost;
+import com.bookstore.api.entities.requests.BookRequestForPut;
 import com.bookstore.api.repositories.BookRepository;
 import com.bookstore.api.services.Abstract.BookService;
 
@@ -50,8 +51,8 @@ public class BookContoller {
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity<?> putOneBook(@PathVariable(name = "id", required = true) int id, @RequestBody Book book) {
-        return new ResponseEntity<>(bookService.putOneBook(id, book), HttpStatus.ACCEPTED);
+    public ResponseEntity<?> putOneBook(@PathVariable(name = "id", required = true) int id, @RequestBody BookRequestForPut request) {
+        return new ResponseEntity<>(bookService.putOneBook(id, request), HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping(path = "/{id}")
