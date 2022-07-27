@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -30,4 +32,9 @@ public class Book {
     @NotNull(message = "Title cannot be null.")
     @Size(min = 3, message = "Title must contains at least 3 characters.")
     private String title;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category; // navigation property
+    // private int categoryId;
 }
