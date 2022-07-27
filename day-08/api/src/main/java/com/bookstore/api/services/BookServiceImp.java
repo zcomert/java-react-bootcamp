@@ -58,9 +58,12 @@ public class BookServiceImp implements BookService {
 
         Set<Author> authors = authorService.getAuthorsByIds(bookRequestForPost.getAuthorIds());
 
+        
+
         Book book = new Book();
         book.setTitle(bookRequestForPost.getTitle());
         book.setCategory(category);
+        book.setBookAuthors(authors);
 
         bookRepository.save(book);
         return ApiResponse.default_CREATED(book);

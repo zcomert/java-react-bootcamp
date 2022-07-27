@@ -9,6 +9,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.JoinColumn;
 
 import lombok.AllArgsConstructor;
@@ -35,7 +38,9 @@ public class Author {
     @Column(name = "email")
     private String email;
 
-    @ManyToMany
-    @JoinTable(name = "bookauthors", joinColumns = @JoinColumn(name = "author_id"), inverseJoinColumns = @JoinColumn(name = "book_id"))
-    private Set<Book> bookAuthors;
+    // @ManyToMany
+    // @JoinTable(name = "bookauthors", joinColumns = @JoinColumn(name =
+    // "author_id"), inverseJoinColumns = @JoinColumn(name = "book_id"))
+    // @JsonIgnore
+    // private Set<Book> bookAuthors;
 }
