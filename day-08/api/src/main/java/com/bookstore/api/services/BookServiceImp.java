@@ -18,20 +18,15 @@ import com.bookstore.api.services.Abstract.AuthorService;
 import com.bookstore.api.services.Abstract.BookService;
 import com.bookstore.api.services.Abstract.CategoryService;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class BookServiceImp implements BookService {
 
     private final BookRepository bookRepository; // IoC
     private final CategoryService categoryService;
     private final AuthorService authorService;
-
-
-    public BookServiceImp(BookRepository bookRepository, CategoryService categoryService, AuthorService authorService) {
-        this.bookRepository = bookRepository;
-        this.categoryService = categoryService;
-        this.authorService = authorService;
-    }
-   
 
     @Override
     public ApiResponse<List<Book>> getAllBook() {
@@ -54,11 +49,9 @@ public class BookServiceImp implements BookService {
         Category category = categoryService
                 .getOneCategory(bookRequestForPost.getCategoryId()).getData();
 
-        // Set<Author> ...  authorServie.x(authorIds)
+        // Set<Author> ... authorServie.x(authorIds)
 
         Set<Author> authors = authorService.getAuthorsByIds(bookRequestForPost.getAuthorIds());
-
-        
 
         Book book = new Book();
         book.setTitle(bookRequestForPost.getTitle());
@@ -76,10 +69,14 @@ public class BookServiceImp implements BookService {
                 .getOneCategory(request.getCategoryId())
                 .getData();
 
+        Set<Author> authors = authorService
+                .getAuthorsByIds(request.getAuthorIds());
+
         // Book var mı? Varsa kitap bilgilerini getirir; yoksa hata fırlatır.
         Book book = getOneBook(id).getData(); // yoksa hata fırlatır!
         book.setTitle(request.getTitle());
         book.setCategory(category);
+        book.setBookAuthors(authors);
 
         return ApiResponse.default_ACCEPTED(bookRepository.save(book));
     }

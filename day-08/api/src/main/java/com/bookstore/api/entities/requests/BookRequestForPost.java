@@ -15,6 +15,7 @@ public class BookRequestForPost {
     @Size(min = 3, message = "Title must contains at least 3 characters.")
     private String title;
 
+    @NotNull
     private int categoryId;
 
     @NotNull
