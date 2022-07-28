@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 export default function TopLink() {
   return (
     <div>
+      <Link to="/admin/authors/list">Authors</Link>
       <Link to="/">Home</Link>
       <Link to="/author/add">Add</Link>
       <Link to="/author/list">List</Link>
