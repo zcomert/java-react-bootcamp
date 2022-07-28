@@ -1,9 +1,14 @@
-import React from 'react'
+import React from "react";
+import { Link } from "react-router-dom";
 
-export default function ListAuthor() {
+export default function ListAuthor(props) {
   return (
     <div>
-      Author List
+      Author List {props.authors.length}
+
+      
+      
+      <Link to='/admin/authors/add'>Add</Link>
     </div>
-  )
+  );
 }
