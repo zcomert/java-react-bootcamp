@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
+import AppContext from "../../context/AppContext";
 
-export default function AddAuthor({authors, setAuthors}) {
+export default function AddAuthor() {
+
+  const {authors,setAuthors} = useContext(AppContext);
 
   const handleClick = () => {
     const entity = {

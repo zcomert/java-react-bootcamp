@@ -1,10 +1,17 @@
-import React, { createContext, useState } from "react";
+import axios from "axios";
+import React, { createContext, useState, useEffect } from "react";
 import data from "../data";
 const AppContext = createContext();
 
 export const AppContextProvider = ({ children }) => {
    
     const [authors, setAuthors] = useState(data);
+
+    useEffect(() => {
+      const url = "http://localhost:8080/api/v1/authors";
+      axios.get(url).then(resp=> {setAuthors(resp.data.data)});
+      
+    }, [])
     
     const values = {
     message: "selam",
