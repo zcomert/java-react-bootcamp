@@ -2,9 +2,11 @@ import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import AppContext from "../../context/AppContext";
 
-export default function TopLink({authors}) {
-  const data = useContext(AppContext);
-  console.log(data)
+
+
+export default function TopLink() {
+  const {authors} = useContext(AppContext);
+  console.log(authors)
   
   return (
     <div>
