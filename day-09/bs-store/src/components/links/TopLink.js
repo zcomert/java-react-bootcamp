@@ -1,13 +1,26 @@
-import React from 'react'
-import { Link } from 'react-router-dom';
-export default function TopLink() {
+import React, { useContext } from "react";
+import { Link } from "react-router-dom";
+import AppContext from "../../context/AppContext";
+
+export default function TopLink({authors}) {
+  const data = useContext(AppContext);
+  console.log(data)
+  
   return (
     <div>
-      <Link to="/admin/authors/list">Authors</Link>
-      <Link to="/">Home</Link>
-      <Link to="/author/add">Add</Link>
-      <Link to="/author/list">List</Link>
-      <Link to="/author/put">Put</Link>
+      <ul>
+        <li>
+          <Link to='/admin/authors/list'>Authors</Link>
+        </li>
+        <li>
+          {" "}
+          <Link to='/'>Home</Link>
+        </li>
+      
+        <li>
+           ... {authors.length}
+        </li>
+      </ul>
     </div>
-  )
+  );
 }
