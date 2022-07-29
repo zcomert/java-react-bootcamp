@@ -44,6 +44,8 @@ const AdminAppbar = () => {
     setAnchorElUser(null);
   };
 
+  
+
   return (
     <AppBar position='static'>
       <Container maxWidth='xl'>

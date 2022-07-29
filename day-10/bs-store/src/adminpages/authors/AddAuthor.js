@@ -9,9 +9,9 @@ export default function AddAuthor() {
   const {authors,setAuthors} = useContext(AppContext);
 
   const initial = {
-    firstName:'',
-    lastName:'',
-    email:''
+    firstName:'Aslan',
+    lastName:'Can',
+    email:'aslan.can@gmail.com'
   }
 
   const [form, setForm] = useState(initial); 
@@ -49,14 +49,18 @@ export default function AddAuthor() {
   return (
     <div>
       
+      <h1>Add</h1>
       <input name="firstName" 
       placeholder="firstname" 
+      value={form.firstName}
       onChange={(e) => handleChange(e)}  />
       
       <input name="lastName"  placeholder="lastname" 
+      value={form.lastName}
       onChange={handleChange}  />
       
-      <input name="email"  placeholder="email" 
+      <input name="email"  placeholder="email"
+      value={form.email} 
       onChange={handleChange}  />
 
       <button onClick={handleClick} >Add Author</button>
