@@ -16,7 +16,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
 export default function ListAuthor() {
-  const { authors, setAuthors } = React.useContext(AppContext);
+  const { authors, setAuthors, isLoading, setIsLoading } = React.useContext(AppContext);
   const navigate = useNavigate();
 
   const removeAuthor = (id) => {
@@ -30,6 +30,9 @@ export default function ListAuthor() {
     // setAuthors(arr);
 
     // ACTION
+
+    setIsLoading(true);
+
     const url = `http://localhost:8080/api/v1/authors/${id}`;
     console.log(url);
 
@@ -41,6 +44,9 @@ export default function ListAuthor() {
         setAuthors(afterRemove);
       })
       .catch((err) => console.error("DELETE ERROR", err));
+
+    setIsLoading(false);
+
   };
 
   const fabStyle = {
@@ -76,7 +82,7 @@ export default function ListAuthor() {
             <TableCell align="left">First name</TableCell>
             <TableCell align="left">Last namee</TableCell>
             <TableCell align="left">Email</TableCell>
-            <TableCell align="center">?</TableCell>
+            <TableCell align="center"></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
