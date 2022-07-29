@@ -6,6 +6,7 @@ import TopLink from "./components/links/TopLink";
 import AppContext from "./context/AppContext";
 import { useContext } from "react";
 import Home from "./pages/home/Home";
+import AdminAppbar from "./components/adminAppbar/AdminAppbar";
 
 
 function App() {
@@ -13,7 +14,7 @@ function App() {
 
   return (
     <div>
-      <TopLink authors={authors}  />
+      <AdminAppbar />
       <Routes>
         <Route path='/admin/books/list' element={<ListBook />} />
         <Route path='/admin/categories/list' element={<ListCategory />} />
