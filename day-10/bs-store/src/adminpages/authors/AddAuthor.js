@@ -1,28 +1,29 @@
-import axios from "axios";
 import React, { useContext, useState } from "react";
 import AppContext from "../../context/AppContext";
 import AuthorService from "../../services/AuthorService";
-import { Fab } from "@mui/material";
+import { Button, Fab, Stack, TextField, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 export default function AddAuthor() {
-
   const authorService = new AuthorService();
-  const {authors,setAuthors} = useContext(AppContext);
+  const { authors, 
+    isLoading,
+    setIsLoading,
+    setAuthors } = useContext(AppContext);
 
   const initial = {
-    firstName:'Aslan',
-    lastName:'Can',
-    email:'aslan.can@gmail.com'
-  }
+    firstName: "Aslan",
+    lastName: "Can",
+    email: "aslan.can@gmail.com",
+  };
 
-  const [form, setForm] = useState(initial); 
+  const [form, setForm] = useState(initial);
   const navigate = useNavigate();
 
   const handleClick = () => {
     // const url = "http://localhost:8080/api/v1/authors";
-    
+
     // const entity = {
     //   firstName:"Ayşe",
     //   lastName:"Ay",
@@ -36,20 +37,31 @@ export default function AddAuthor() {
     //   setAuthors([...authors, resp.data]) // action -> (dispatch) -> reducer
     // })
 
-    authorService.postOneAuthor(form).then(resp => 
-      setAuthors([...authors, resp.data]))
-      .catch(err => alert(err));
-  }
+   setIsLoading(true);
+   console.log(isLoading);
+   
+   setTimeout(() => {
+       authorService
+       .postOneAuthor(form)
+       .then((resp) => setAuthors([...authors, resp.data]))
+       .catch((err) => alert(err));
+       setIsLoading(false);
+       navigate("/admin/authors/list");
+     },3000)
+     
+    
+
+     console.log(isLoading);
+  };
 
   const handleChange = (e) => {
     // console.log({...form})
-    
+
     setForm({
       ...form,
-      [e.target.name] : e.target.value
-     })
-  }
-
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const fabStyle = {
     position: "fixed",
@@ -64,25 +76,43 @@ export default function AddAuthor() {
     label: "Add",
   };
 
-
   return (
-    <div>
-      
-      <h1>Add</h1>
-      <input name="firstName" 
-      placeholder="firstname" 
-      value={form.firstName}
-      onChange={(e) => handleChange(e)}  />
-      
-      <input name="lastName"  placeholder="lastname" 
-      value={form.lastName}
-      onChange={handleChange}  />
-      
-      <input name="email"  placeholder="email"
-      value={form.email} 
-      onChange={handleChange}  />
+    <>
+      <Stack
+        alignSelf='center'
+        alignItems='center'
+        sx={{ minWidth: "650px" }}
+        spacing={3}
+      >
+        <Typography align='center' gutterBottom variant='h5'>
+          Add Author
+        </Typography>
 
-      <button onClick={handleClick} >Add Author</button>
+        <TextField
+          color='primary'
+          label='First Name'
+          name='firstName'
+          placeholder='firstname'
+          value={form.firstName}
+          onChange={(e) => handleChange(e)}
+        />
+
+        <TextField
+          name='lastName'
+          label='Last Name'
+          placeholder='lastname'
+          value={form.lastName}
+          onChange={handleChange}
+        />
+        <TextField
+          name='email'
+          label='Email'
+          placeholder='email'
+          value={form.email}
+          onChange={handleChange}
+        />
+        <Button variant="contained" onClick={handleClick}>Add</Button>
+      </Stack>
 
       <Fab
         sx={fab.sx}
@@ -92,8 +122,6 @@ export default function AddAuthor() {
       >
         {fab.icon}
       </Fab>
-      
-      {/* {JSON.stringify(form)} */}
-    </div>
+    </>
   );
 }

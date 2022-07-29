@@ -8,6 +8,7 @@ export const AppContextProvider = ({ children }) => {
    
     const authorService = new AuthorService();
     const [authors, setAuthors] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
       // const url = "http://localhost:8080/api/v1/authors";
@@ -17,9 +18,10 @@ export const AppContextProvider = ({ children }) => {
     
     const values = {
     message: "selam",
-    numbers: 5,
     authors,
-    setAuthors
+    setAuthors,
+    isLoading,
+    setIsLoading
   };
   
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
