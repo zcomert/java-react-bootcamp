@@ -4,8 +4,16 @@ import { Link } from "react-router-dom";
 import AppContext from "../../context/AppContext";
 import AddAuthor from "./AddAuthor";
 import AddIcon from "@mui/icons-material/Add";
-import { Fab } from "@mui/material";
+import { Button, ButtonGroup, Fab } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
 
 export default function ListAuthor() {
   const { authors, setAuthors } = React.useContext(AppContext);
@@ -51,19 +59,6 @@ export default function ListAuthor() {
   return (
     <div>
       Author List {authors.length}
-      {authors.map((author, index) => {
-        const { id, firstName, lastName } = author;
-        return (
-          <p key={index}>
-            {`${id} ${firstName} ${lastName}`}
-            <button onClick={() => removeAuthor(id)}>Remove</button>
-          </p>
-        );
-      })}
-      {/* <Link to='/admin/authors/add'>Add</Link> */}
-      <div>
-        <button onClick={() => setAuthors([])}>Clear all</button>
-      </div>
       <Fab
         sx={fab.sx}
         aria-label={fab.label}
@@ -72,6 +67,40 @@ export default function ListAuthor() {
       >
         {fab.icon}
       </Fab>
+
+      <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell align="left">Id</TableCell>
+            <TableCell align="left">First name</TableCell>
+            <TableCell align="left">Last namee</TableCell>
+            <TableCell align="left">Email</TableCell>
+            <TableCell align="center">?</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {authors.map((author) => (
+            <TableRow
+              key={author.id}
+              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            >
+              <TableCell component="th" scope="row">{author.id}</TableCell>
+              <TableCell align="left">{author.firstName}</TableCell>
+              <TableCell align="left">{author.lastName}</TableCell>
+              <TableCell align="left">{author.email}</TableCell>
+              <TableCell align="center">
+                <ButtonGroup orientation="vertical" >
+                  <Button>Edit</Button>
+                  <Button onClick={() => removeAuthor(author.id)}  >Remove</Button>
+                </ButtonGroup>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+
     </div>
   );
 }
