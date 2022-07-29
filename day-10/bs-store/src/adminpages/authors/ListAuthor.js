@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import AppContext from "../../context/AppContext";
 import AddAuthor from "./AddAuthor";
 import AddIcon from "@mui/icons-material/Add";
-import { Button, ButtonGroup, Fab } from "@mui/material";
+import { Button, ButtonGroup, Fab, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 import Table from '@mui/material/Table';
@@ -58,7 +58,7 @@ export default function ListAuthor() {
 
   return (
     <div>
-      Author List {authors.length}
+      
       <Fab
         sx={fab.sx}
         aria-label={fab.label}
@@ -68,7 +68,7 @@ export default function ListAuthor() {
         {fab.icon}
       </Fab>
 
-      <TableContainer component={Paper}>
+      <TableContainer sx={{m:1, p:1}} component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
@@ -100,7 +100,9 @@ export default function ListAuthor() {
         </TableBody>
       </Table>
     </TableContainer>
-
+    <Typography align="center" gutterBottom variant="body1" >
+    The number of {authors.length}.
+    </Typography>
     </div>
   );
 }
