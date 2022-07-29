@@ -9,6 +9,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -30,11 +33,18 @@ public class Author {
     private int id;
 
     @Column(name = "first_name")
+    @NotNull
+    @NotBlank
     private String firstName;
 
+    @NotNull
+    @NotBlank
     @Column(name = "last_name")
     private String lastName;
 
+    @NotNull
+    @NotBlank
+    @Email
     @Column(name = "email")
     private String email;
 

@@ -46,7 +46,7 @@ public class AuthorController {
     }
 
     @PostMapping
-    public ResponseEntity<?> postOneAuthor(@RequestBody Author author) {
+    public ResponseEntity<?> postOneAuthor(@RequestBody @Valid Author author) {
         var apiResponse = authorService.postOneAuthor(author);
         return new ResponseEntity<>(apiResponse, apiResponse.getHttpStatus());
     }
