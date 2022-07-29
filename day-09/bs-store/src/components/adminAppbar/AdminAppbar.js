@@ -22,7 +22,7 @@ const paths = [
   "/admin/authors/list",
 ];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
-
+ 
 const AdminAppbar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
