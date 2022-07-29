@@ -5,11 +5,11 @@ import AppContext from "../../context/AppContext";
 import AddAuthor from "./AddAuthor";
 import AddIcon from "@mui/icons-material/Add";
 import { Fab } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 export default function ListAuthor() {
   const { authors, setAuthors } = React.useContext(AppContext);
-
-  
+  const navigate = useNavigate();
 
   const removeAuthor = (id) => {
     // let arr = [];
@@ -36,7 +36,7 @@ export default function ListAuthor() {
   };
 
   const fabStyle = {
-    position: "absolute",
+    position: "fixed",
     bottom: 16,
     right: 16,
   };
@@ -47,8 +47,6 @@ export default function ListAuthor() {
     icon: <AddIcon />,
     label: "Add",
   };
-
-  
 
   return (
     <div>
@@ -66,10 +64,14 @@ export default function ListAuthor() {
       <div>
         <button onClick={() => setAuthors([])}>Clear all</button>
       </div>
-
-      <Fab sx={fab.sx} aria-label={fab.label} color={fab.color}>
-            {fab.icon}
-          </Fab>
+      <Fab
+        sx={fab.sx}
+        aria-label={fab.label}
+        onClick={() => navigate("/admin/authors/add")}
+        color={fab.color}
+      >
+        {fab.icon}
+      </Fab>
     </div>
   );
 }

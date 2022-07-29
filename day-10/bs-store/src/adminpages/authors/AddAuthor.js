@@ -2,6 +2,9 @@ import axios from "axios";
 import React, { useContext, useState } from "react";
 import AppContext from "../../context/AppContext";
 import AuthorService from "../../services/AuthorService";
+import { Fab } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 export default function AddAuthor() {
 
@@ -15,6 +18,7 @@ export default function AddAuthor() {
   }
 
   const [form, setForm] = useState(initial); 
+  const navigate = useNavigate();
 
   const handleClick = () => {
     // const url = "http://localhost:8080/api/v1/authors";
@@ -46,6 +50,21 @@ export default function AddAuthor() {
      })
   }
 
+
+  const fabStyle = {
+    position: "fixed",
+    bottom: 16,
+    right: 16,
+  };
+
+  const fab = {
+    color: "primary",
+    sx: fabStyle,
+    icon: <ArrowBackIcon />,
+    label: "Add",
+  };
+
+
   return (
     <div>
       
@@ -64,6 +83,15 @@ export default function AddAuthor() {
       onChange={handleChange}  />
 
       <button onClick={handleClick} >Add Author</button>
+
+      <Fab
+        sx={fab.sx}
+        aria-label={fab.label}
+        onClick={() => navigate("/admin/authors/list")}
+        color={fab.color}
+      >
+        {fab.icon}
+      </Fab>
       
       {/* {JSON.stringify(form)} */}
     </div>
