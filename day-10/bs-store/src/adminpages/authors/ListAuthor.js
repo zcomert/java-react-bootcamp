@@ -99,7 +99,7 @@ export default function ListAuthor() {
         </Table>
       </TableContainer>
       <Typography align='center' gutterBottom variant='body1'>
-        The number of {authors?.length}.
+        The number of author is {authors?.length}.
       </Typography>
     </div>
   );
