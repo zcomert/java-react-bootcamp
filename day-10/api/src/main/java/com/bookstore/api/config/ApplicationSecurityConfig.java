@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import static com.bookstore.api.security.ApplicationUserRole.*;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,7 +26,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 http
                                 .authorizeRequests()
                                 .antMatchers("/", "/index", "/css/*", "js/**").permitAll()
-                                .antMatchers("/api/**").hasAnyRole("ADMIN", "EDITOR")
+                                .antMatchers("/api/**").hasAnyRole(ADMIN.name(), EDITOR.name())
                                 .anyRequest()
                                 .authenticated()
                                 .and()

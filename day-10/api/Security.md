@@ -1,4 +1,5 @@
 # 1. Basic Authentication
+
 ## 1.1. Dependency
 
 Öncelikle projeye yeni bir bağımlılık eklenir.
@@ -9,19 +10,20 @@
     <artifactId>spring-boot-starter-security</artifactId>
 </dependency>
 ```
-Yukarıdkai bağımlılık ifadesiyle artık API güvenliği ilk adım atılır. Konsol ortamında verilen **generated security password** ve **user** kullanıcı adı ile oturum açılabilir. 
 
-* Logout olma şansı yoktur. 
-* Kullanıcı adı ve şifresine müdahale edilemez.
+Yukarıdkai bağımlılık ifadesiyle artık API güvenliği ilk adım atılır. Konsol ortamında verilen **generated security password** ve **user** kullanıcı adı ile oturum açılabilir.
+
+- Logout olma şansı yoktur.
+- Kullanıcı adı ve şifresine müdahale edilemez.
 
 ## 1.2. Application Security Config
 
 **security/config** gibi bir isimle yeni bir klasör projeye dahil edilir.
 
 Gelen Request yapılarını hangi kurallara göre cevap verileceğini belirlemek üzere **ApplicationSecurityConfig** sınıfı kullanılır.
-Bu sınıf **WebSecurityConfigurerAdapter** sınıfından kalıtılır. 
+Bu sınıf **WebSecurityConfigurerAdapter** sınıfından kalıtılır.
 
-**config** metodu (HttpSecurity imzalı olanı)  **Override** edilir.
+**config** metodu (HttpSecurity imzalı olanı) **Override** edilir.
 
 ```java
 @Configuration
@@ -35,8 +37,9 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 }
 ```
 
-## 1.3. Authentication Nasıl Yapılır? 
-Bu metot üzerinde authentication işleminin nasıl yapılması gerektiği tanımlanır. Basic Authentication ile API güvenliğini sağlayalım. 
+## 1.3. Authentication Nasıl Yapılır?
+
+Bu metot üzerinde authentication işleminin nasıl yapılması gerektiği tanımlanır. Basic Authentication ile API güvenliğini sağlayalım.
 
 ```java
 @Configuration
@@ -54,30 +57,29 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 }
 ```
 
-Bu işlem sonucunda herhangi bir kaynak üzerinden GET, POST, PUT ve DELETE işlemlerinin yapılması tavsiye edilir. 
-User ve password bilgisi girilmeden hiçbir http isteği yanıtlanmaz iken; user ve password bilgisi bir Authorization header ifadesiyle gönderildiğinde yalnızca GET isteklerinin yanıtlandığı ancak POST, PUT ve DELETE gibi işlemlerin ise yanıtlanmadığı (Forbidden) yani yasaklandığı görülür. 
+Bu işlem sonucunda herhangi bir kaynak üzerinden GET, POST, PUT ve DELETE işlemlerinin yapılması tavsiye edilir.
+User ve password bilgisi girilmeden hiçbir http isteği yanıtlanmaz iken; user ve password bilgisi bir Authorization header ifadesiyle gönderildiğinde yalnızca GET isteklerinin yanıtlandığı ancak POST, PUT ve DELETE gibi işlemlerin ise yanıtlanmadığı (Forbidden) yani yasaklandığı görülür.
 
 ![Basic Authentication](http://www.zafercomert.com/medya/java/springSecurity-BasicAuth.svg)
 
-
-# 2. UserDetailsService 
+# 2. UserDetailsService
 
 ## 2.1. UserDetailsService
 
-**UserDetailService** üzerinden kullanıcı tanımları gerçekleştirebilir. Bu noktada kullanıcı bilgilerini tutmak üzere **InMemoryUserDetailsManager** kullanıyoruz. 
+**UserDetailService** üzerinden kullanıcı tanımları gerçekleştirebilir. Bu noktada kullanıcı bilgilerini tutmak üzere **InMemoryUserDetailsManager** kullanıyoruz.
 
-Ancak **UserDetailService** implemente eden daha farklı sınıflar da vardır. Detaylar için resmi dokümantasyon incelenebilir [Interface UserDetailsService](https://docs.spring.io/spring-security/site/docs/3.2.8.RELEASE/apidocs/org/springframework/security/core/userdetails/UserDetailsService.html). 
+Ancak **UserDetailService** implemente eden daha farklı sınıflar da vardır. Detaylar için resmi dokümantasyon incelenebilir [Interface UserDetailsService](https://docs.spring.io/spring-security/site/docs/3.2.8.RELEASE/apidocs/org/springframework/security/core/userdetails/UserDetailsService.html).
 
-**UserDetailService** interface yapısını implemente eden sınıflar: 
+**UserDetailService** interface yapısını implemente eden sınıflar:
 
-*  CachingUserDetailsService, 
-*  InMemoryDaoImpl, 
-*  *InMemoryUserDetailsManager*, 
-*  JdbcDaoImpl, 
-*  JdbcUserDetailsManager, 
-*  LdapUserDetailsManager,
-*  LdapUserDetailsService, 
-*  UserDetailsServiceWrapper
+- CachingUserDetailsService,
+- InMemoryDaoImpl,
+- _InMemoryUserDetailsManager_,
+- JdbcDaoImpl,
+- JdbcUserDetailsManager,
+- LdapUserDetailsManager,
+- LdapUserDetailsService,
+- UserDetailsServiceWrapper
 
 ```java
 @Override
@@ -103,11 +105,12 @@ protected UserDetailsService userDetailsService() {
             .build();
 
     return new InMemoryUserDetailsManager(admin, editor, user);
-}    
+}
 ```
+
 > UserDetailsService de bir konfigürasyon ifadesidir. Bu nedenle @Bean annotation yapısı mutlaka bu metodun üzerine eklenmelidir.
 
-Uygulamanın bu haliyle yukarıda verilen kullanıcı adı ve şifreler ile artık API test edilebilir durumdadur. 
+Uygulamanın bu haliyle yukarıda verilen kullanıcı adı ve şifreler ile artık API test edilebilir durumdadur.
 
 ## 2.2 PasswordEncoder
 
@@ -122,7 +125,7 @@ public class PasswordConfig {
 }
 ```
 
-Injection unutulmamalıdır: 
+Injection unutulmamalıdır:
 
 ```java
 private final PasswordEncoder passwordEncoder;
@@ -147,4 +150,113 @@ private final PasswordEncoder passwordEncoder;
                 .and()
                 .httpBasic();
     }
+```
+
+## 3. Roles and Permissions
+
+## 3.1. Google Guava
+
+Öncelikle projemize Google Guava bağımlılığını ekleyeceğiz [Google Guava](https://github.com/google/guava).
+
+> Guava, yeni koleksiyon türleri (çoklu harita ve çoklu küme gibi), değişmez koleksiyonlar, bir grafik kitaplığı ve eşzamanlılık için yardımcı programları içeren Google'ın temel Java kitaplıkları kümesidir.
+> pom.xml dosyasına aşağıdaki bağımlılık eklenir.
+
+```xml
+<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>28.1-jre</version>
+</dependency>
+```
+
+## 3.2. ApplicationUserRole
+
+ApplicationUserRole içerisinde uygulamadaki rol tanımlarını gerçekleştirmeye çalışıyoruz. Bu kapsamda Admin, Editor ve User rollerinin tanımını enum formatında gerçekleştiriyoruz.
+
+```java
+public enum ApplicationUserRole {
+    ADMIN(Sets.newHashSet(BOOK_READ, BOOK_WRITE, BOOK_PUT, BOOK_DELETE)),
+    EDITOR(Sets.newHashSet(BOOK_READ, BOOK_WRITE, BOOK_PUT)),
+    USER(Sets.newHashSet(BOOK_READ));
+
+    private final Set<ApplicationUserPermission> permissions;
+
+    ApplicationUserRole(Set<ApplicationUserPermission> permissions) {
+        this.permissions = permissions;
+    }
+
+    public Set<ApplicationUserPermission> getPermissions() {
+        return permissions;
+    }
+}
+```
+
+> #### Bir role çok sayıda Permission tanımı içerebilir.
+
+## 3.3 ApplicationUserPermission
+
+**ApplicationUserPermission** da bir **enum** yapısıdır ve kaynaklara ait yazma ya da okuma gibi işlevlerin tanımlanmasını sağlar. Burada tanımlanan izin ifadeleri istenilen Rollere atanabilir.
+
+```java
+public enum ApplicationUserPermission {
+    BOOK_GET("book:get"),
+    BOOK_DELETE("book:delete"),
+    BOOK_PUT("book:put"),
+    BOOK_POST("book:post");
+
+    private final String permission;
+
+    ApplicationUserPermission(String permission) {
+        this.permission = permission;
+    }
+
+    public String getPermission() {
+        return permission;
+    }
+}
+```
+
+```java
+import java.util.Set;
+
+import com.google.common.collect.Sets;
+import static com.bookstore.api.security.ApplicationUserPermission.*;
+
+public enum ApplicationUserRole {
+    ADMIN(Sets.newHashSet(BOOK_GET, BOOK_POST, BOOK_PUT, BOOK_DELETE)),
+    EDITOR(Sets.newHashSet(BOOK_GET, BOOK_POST, BOOK_PUT)),
+    USER(Sets.newHashSet(BOOK_GET));
+
+    private final Set<ApplicationUserPermission> permissions;
+
+    ApplicationUserRole(Set<ApplicationUserPermission> permissions) {
+        this.permissions = permissions;
+    }
+
+    public Set<ApplicationUserPermission> getPermissions() {
+        return permissions;
+    }
+}
+
+```
+
+## 3.4. ApplicationSecurityConfig Güncellemesi
+
+Artık rol tanımları bir enum yapısı içerisinde tanımlandığından String ifadeleri konfigürasyon dosyamızdan çıkartabiliriz.
+
+```java
+
+import static com.bookstore.api.security.ApplicationUserRole.*;
+
+ @Override
+protected void configure(HttpSecurity http) throws Exception {
+        http
+            .authorizeRequests()
+            .antMatchers("/", "/index", "/css/*", "js/**").permitAll()
+            .antMatchers("/api/**").hasAnyRole(ADMIN.name(), EDITOR.name())
+            .anyRequest()
+            .authenticated()
+            .and()
+            .httpBasic();
+}
 ```
