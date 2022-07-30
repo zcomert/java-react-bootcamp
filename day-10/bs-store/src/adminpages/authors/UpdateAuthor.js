@@ -1,25 +1,39 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import AppContext from "../../context/AppContext";
 import AuthorService from "../../services/AuthorService";
 import { Button, Fab, Stack, TextField, Typography } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import {useSelector, useDispatch} from "react-redux"
-import { postOneAuthor } from "../../store/actions/authorActions";
+import { getOneAuthor, postOneAuthor, putOneAuthor } from "../../store/actions/authorActions";
 
-export default function AddAuthor() {
+
+export default function UpdateAuthor() {
   const initial = {
-    firstName: "Aslan",
-    lastName: "Can",
-    email: "aslan.can@gmail.com",
+    firstName: "",
+    lastName: "",
+    email: "",
   };
   
   const { isLoading, setIsLoading } = useContext(AppContext);
-  const authors = useSelector(state => state.author);
+  const {author,authors} = useSelector(state => state.author);
+  const {id} = useParams();
   const authorDispatch = useDispatch();
   const [form, setForm] = useState(initial);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    new AuthorService().getOneAuthor(id)
+    .then(resp => resp.data)
+    .then(resp => {
+        setForm({
+            firstName:resp.firstName,
+            lastName:resp.lastName,
+            email : resp.email
+        })
+    })
+
+  },[])
   
 
 
@@ -29,10 +43,10 @@ export default function AddAuthor() {
 
   
   const handleClick = async () => {
-    await loading();
-    authorDispatch(postOneAuthor(form))
-    navigate("/admin/authors/list");
-    setIsLoading(false);
+    // await loading();
+     authorDispatch(putOneAuthor(id,form))
+     navigate("/admin/authors/list");
+    // setIsLoading(false);
     
   };
 
@@ -54,7 +68,7 @@ export default function AddAuthor() {
   };
 
   const fab = {
-    color: "secondary",
+    color: "primary",
     sx: fabStyle,
     icon: <ArrowBackIcon />,
     label: "Add",
@@ -96,7 +110,7 @@ export default function AddAuthor() {
           onChange={handleChange}
         />
         <Button variant='contained' onClick={handleClick}>
-          Add
+          Save
         </Button>
       </Stack>
 

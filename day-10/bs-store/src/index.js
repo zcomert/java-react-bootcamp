@@ -4,20 +4,24 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
-import AppContext, {AppContextProvider} from "./context/AppContext";
+import { AppContextProvider } from "./context/AppContext";
+import configureStore from "./store/configureStore";
+import { Provider } from "react-redux";
+import CustomThemeProvider from "./components/themes/CustomTeamProvider";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <AppContextProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </AppContextProvider>
+    <Provider store={configureStore()}>
+      <AppContextProvider>
+        <BrowserRouter>
+          <CustomThemeProvider>
+            <App />
+          </CustomThemeProvider>
+        </BrowserRouter>
+      </AppContextProvider>
+    </Provider>
   </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

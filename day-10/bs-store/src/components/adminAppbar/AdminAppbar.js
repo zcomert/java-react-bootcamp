@@ -14,6 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { Link } from "react-router-dom";
 import {useNavigate} from "react-router-dom";
+import PositionedMenu from "../themes/PositionedMenu";
 
 const pages = ["Books", "Categories", "Authors"];
 const paths = [
@@ -47,7 +48,7 @@ const AdminAppbar = () => {
   
 
   return (
-    <AppBar position='static'>
+    <AppBar color='primary'  position='static'>
       <Container maxWidth='xl'>
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
@@ -166,6 +167,7 @@ const AdminAppbar = () => {
                 </MenuItem>
               ))}
             </Menu>
+            {<PositionedMenu />}
           </Box>
         </Toolbar>
       </Container>
