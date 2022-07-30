@@ -7,7 +7,11 @@ class AuthorService {
 
   async getAllAuthors() {
     return await axios
-      .get(this.baseUrl)
+      .get(this.baseUrl,{
+        headers:{
+          'Authorization':'Basic ' + btoa("admin" + ':' + "admin123456")
+        }
+      })
       .then((resp) => resp.data)
       .catch((err) => console.log(err));
   }

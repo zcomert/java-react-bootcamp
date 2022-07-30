@@ -3,6 +3,7 @@ package com.bookstore.api.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
 public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -29,11 +31,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                                 .csrf().disable()
                                 .authorizeRequests()
                                 .antMatchers("/", "/index", "/css/*", "js/**").permitAll()
-                                .antMatchers(HttpMethod.DELETE, "/api/v1/**").hasAuthority(BOOK_DELETE.getPermission())
-                                .antMatchers(HttpMethod.PUT, "/api/v1/**").hasAuthority(BOOK_PUT.getPermission())
-                                .antMatchers(HttpMethod.POST, "/api/v1/**").hasAuthority(BOOK_POST.getPermission())
-                                .antMatchers(HttpMethod.GET, "/api/v1/**").hasAuthority(BOOK_GET.getPermission())
-                                .antMatchers("/api/**").hasAnyRole(ADMIN.name(), EDITOR.name())
+                                .antMatchers("/api/**").permitAll()
                                 .anyRequest()
                                 .authenticated()
                                 .and()

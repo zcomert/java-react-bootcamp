@@ -347,6 +347,8 @@ Path tanımlarına bağlı olarak herhangi bir permission ifadesi için **hasAut
 
 ```java
 
+import static org.btk.bookstore.security.ApplicationUserPermission.*;
+
 @Override
         protected void configure(HttpSecurity http) throws Exception {
                 http
@@ -372,3 +374,76 @@ Bu durumda:
     - Admin, GET, POST, PUT, DELETE işlemlerini yapabilir.
     - Editör; GET, POST, PUT yapabilir.
     - User; sadece GET yapabilir.
+
+# 6. PreAuthorize
+# 6.1. @PreAuthorize
+Metotların öncesinde kullanılan bir annotation yapısı ile herbir metoda ait **Role** ya da **Permission** tanımı gerçekleştirmek mümkündür. Bu çerçevede: 
+
+- hasRole
+- hasAuthority
+- hasAnyRole
+- hasAnyAuthority
+
+ifadeleri kullanılabilir.
+
+**@PreAuthorize** ifadesi metotların başına eklenir. 
+```java
+@RestController
+@RequestMapping("/management/api/books")
+public class BooksManagerController {
+
+    @GetMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_EDITOR','ROLE_USER')")
+    public List<Book> getAllBooks() {
+   
+    }
+
+    @PostMapping
+    @PreAuthorize("hasAuthority('book:write')")
+    public ResponseEntity<Book> addOneBook(@RequestBody Book book) {
+   
+    }
+
+    @PutMapping(path = "{id}")
+    @PreAuthorize("hasAuthority('book:put')")
+    public ResponseEntity<Book> addOneBook(@PathVariable(name = "id") int id, @RequestBody Book book) {
+   
+    }
+
+    @DeleteMapping(path = "{id}")
+    @PreAuthorize("hasAuthority('book:delete')")
+    public ResponseEntity<Book> addOneBook(@PathVariable(name = "id") int id) {
+   
+    }
+}
+```
+
+## 6.2. EnableGlobalMethodSecurity
+**@PreAuthorize ** annotation yapısının kullanılabilmesi için **EnableGlobalMethodSecurity** özelliğinin **ApplicationSecurityConfig** ifadesinin hemen üzerinde tanımlanması gerekir.
+
+```java
+Configuration
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
+    // ... 
+}
+```
+
+## 6.3. antMatchers 
+Son adımda artık antMatcher ifadelerinin kullanımına gerek kalmamaktadır. İlgili ifadeler artık kaldırılabilir. Biz uygulama çerçevesinde sadece **BooksManagerController** içine **@PreAuthorize** kullandığımızdan dolayı sadece **/management/api/books** ait olan tanımları yorum satırına çeviriyoruz. 
+
+```java
+@Override
+        protected void configure(HttpSecurity http) throws Exception {
+                http
+                                .csrf().disable()
+                                .authorizeRequests()
+                                .antMatchers("/", "/index", "/css/*", "js/**").permitAll()
+                                .antMatchers("/api/**").permitAll()
+                                .anyRequest()
+                                .authenticated()
+                                .and()
+                                .httpBasic();
+        }
+```
