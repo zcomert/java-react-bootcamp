@@ -260,3 +260,115 @@ protected void configure(HttpSecurity http) throws Exception {
             .httpBasic();
 }
 ```
+# 4. CSRF Disable
+
+Burada öncelikle **POST**, **PUT** ya da **DELETE** gibi http isteklerinin gönderilebilmesi için ya **CSRF** (Cross-Side Request Forgery) ifadesinin kapatılması ya da **CRSF** için bir implementasyonun yapılması gerekir. 
+
+**CSRF** ifadesini kapatarak devam edeceğiz. Bu konfigürasyonu gerçekleştirmek için de **ApplicationSecurityConfig** dosyası üzerinde çalışıyoruz. 
+
+Ayrıca management API çağırısı yapabilmek için hasRole ifadesiyle **ADMIN** rolünü geçerli kılıyoruz. 
+
+configure metodu içerisinde **categories** kaynağı için ADMIN yetkili kılıyoruz.
+
+```java
+
+@Override
+        protected void configure(HttpSecurity http) throws Exception {
+                http
+                    .csrf().disable()
+                    .authorizeRequests()
+                    .antMatchers("/", "/index", "/css/*", "js/**").permitAll()
+                    .antMatchers("/api/v1/categories").hasAnyRole(ADMIN.name())
+                    .antMatchers("/api/**").hasAnyRole(ADMIN.name(), EDITOR.name())
+                    .anyRequest()
+                    .authenticated()
+                    .and()
+                    .httpBasic();
+}
+
+```
+
+# 5. Permission based Authentication
+Bu bölümde permission tabanlı oturum açma işlemini gerçekleştiriyoruz. Hatırlayacağınız üzere bir role tanımı birden fazla permission içerebilirdi. Bir başka ifadeyle, çeşitli permission ifadelerinin birleşimi role tanımını oluşturmaktadır. 
+
+## 5.1. getAuthorities() metodunun uygulanması 
+
+**getAuthorities** metodu ApplicationUserRole sınıfı içerisinde tanımlanır. 
+
+**getAuthorities()** aslında Role üzerinde tanımlı olan permission ifadelerinin getirilmesini sağlar. 
+
+```java
+
+public Set<SimpleGrantedAuthority> getGrantedAuthorities() {
+    Set<SimpleGrantedAuthority> permissions = getPermissions().stream()
+            .map(permission -> new SimpleGrantedAuthority(permission.getPermission()))
+            .collect(Collectors.toSet());
+    permissions.add(new SimpleGrantedAuthority("ROLE_" + this.name()));
+    return permissions;
+}
+
+```
+
+## 5.2 UserDetailsService Güncellemesi 
+Bu durumda artık role tabanlı değil; permission tabanlı olarak kullanıcı bilgilerinin getirilmesi gerekir. Bu çerçevede **ApplicationUserRole** sınıfı içerisindeki **getGrantedAuthorities()** metodu kullanılır.
+
+
+```java
+@Override
+@Bean
+protected UserDetailsService userDetailsService() {
+    UserDetails admin = User.builder()
+            .username("admin")
+            .password(passwordEncoder.encode("admin123456"))
+            // .roles(ADMIN.name())
+            .authorities(ADMIN.getGrantedAuthorities())
+            .build();
+
+    UserDetails editor = User.builder()
+            .username("editor")
+            .password(passwordEncoder.encode("editor123456"))
+            .authorities(EDITOR.getGrantedAuthorities())
+            // .roles(EDITOR.name())
+            .build();
+
+    UserDetails user = User.builder()
+            .username("user")
+            .password(passwordEncoder.encode("user123456"))
+            .authorities(USER.getGrantedAuthorities())
+            // .roles(USER.name())
+            .build();
+
+    return new InMemoryUserDetailsManager(admin, editor, user);
+}
+```
+
+## 5.3. hasAuthority veya hasAnyAuthority 
+Path tanımlarına bağlı olarak herhangi bir permission ifadesi için **hasAuthority** ya da **hasAnyAuthority** metotlarıyla izin tanımları gerçekleştirilir. 
+
+```java
+
+@Override
+        protected void configure(HttpSecurity http) throws Exception {
+                http
+                        .csrf().disable()
+                        .authorizeRequests()
+                        .antMatchers("/", "/index", "/css/*", "js/**").permitAll()
+                        .antMatchers(HttpMethod.DELETE, "/api/v1/**").hasAuthority(BOOK_DELETE.getPermission())
+                        .antMatchers(HttpMethod.PUT, "/api/v1/**").hasAuthority(BOOK_PUT.getPermission())
+                        .antMatchers(HttpMethod.POST, "/api/v1/**").hasAuthority(BOOK_POST.getPermission())
+                        .antMatchers(HttpMethod.GET, "/api/v1/**").hasAuthority(BOOK_GET.getPermission())
+                        .antMatchers("/api/**").hasAnyRole(ADMIN.name(), EDITOR.name())
+                        .anyRequest()
+                        .authenticated()
+                        .and()
+                        .httpBasic();
+        }
+
+```
+
+Artık permission/authority bazlı yetkilendirme işlemi gerçekleştirilebilir durumdadır. 
+
+Bu durumda: 
+    - Admin, GET, POST, PUT, DELETE işlemlerini yapabilir.
+    - Editör; GET, POST, PUT yapabilir.
+    - User; sadece GET yapabilir.
