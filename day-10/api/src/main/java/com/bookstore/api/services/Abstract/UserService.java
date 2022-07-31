@@ -6,7 +6,7 @@ import com.bookstore.api.entities.User;
 import com.bookstore.api.entities.dto.UserDto;
 import com.bookstore.api.entities.models.ApiResponse;
 
-public interface UserService {
+public interface UserService extends ApplicationUserDao {
     ApiResponse<List<UserDto>> getAllUsers();
 
     ApiResponse<UserDto> getOneUser(int id);

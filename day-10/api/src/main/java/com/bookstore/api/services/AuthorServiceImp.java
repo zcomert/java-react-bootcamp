@@ -12,7 +12,6 @@ import com.bookstore.api.entities.models.ApiResponse;
 import com.bookstore.api.exceptions.notFoundExceptions.AuthorNotFoundException;
 import com.bookstore.api.repositories.AuthorRepository;
 import com.bookstore.api.services.Abstract.AuthorService;
-import com.bookstore.api.exceptions.notFoundExceptions.AuthorNotFoundException;;
 
 @Service
 public class AuthorServiceImp implements AuthorService {
@@ -64,21 +63,6 @@ public class AuthorServiceImp implements AuthorService {
         authorIds
                 .forEach(id -> authors.add(getOneAuthor(id).getData()));
         return authors;
-
-        // Iterable<Author> authors = authorRepository.findByIdIn(authorIds);
-
-        // List<Author> result = new ArrayList<Author>();
-        // authors.forEach(result::add);
-
-        // if (result.size() == 0) {
-        // throw new AuthorNotFoundException(0);
-        // }
-
-        // HashSet<Author> authorSet = new HashSet<Author>();
-        // for (Author author : authors) {
-        // authorSet.add(author);
-        // }
-        // return authorSet;
     }
 
 }

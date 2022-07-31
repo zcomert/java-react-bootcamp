@@ -30,7 +30,7 @@ import static com.bookstore.api.security.ApplicationUserRole.*;
 @Service
 @RequiredArgsConstructor
 @Repository("mysql")
-public class UserServiceImp implements ApplicationUserDao, UserService {
+public class UserServiceImp implements UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -99,7 +99,7 @@ public class UserServiceImp implements ApplicationUserDao, UserService {
 
         User user = userRepository.findByUserName(username);
 
-        Set<SimpleGrantedAuthority> grantedAuthorities = null;
+        Set<SimpleGrantedAuthority> grantedAuthorities = new HashSet<>();
         Set<Role> roles = user.getRoles();
 
         for (Role role : roles) {
@@ -116,7 +116,6 @@ public class UserServiceImp implements ApplicationUserDao, UserService {
                 default:
                     break;
             }
-
         }
 
         Optional<ApplicationUser> applicationUser = Optional.ofNullable(new ApplicationUser(

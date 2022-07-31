@@ -2,9 +2,9 @@ package com.bookstore.api.security;
 
 public enum ApplicationUserPermission {
     BOOK_GET("book:get"),
-    BOOK_DELETE("book:delete"),
+    BOOK_POST("book:post"),
     BOOK_PUT("book:put"),
-    BOOK_POST("book:post");
+    BOOK_DELETE("book:delete");
 
     private final String permission;
 
