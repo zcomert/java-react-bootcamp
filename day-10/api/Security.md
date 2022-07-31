@@ -447,3 +447,180 @@ Son adımda artık antMatcher ifadelerinin kullanımına gerek kalmamaktadır. �
                                 .httpBasic();
         }
 ```
+
+# 7. UserDetailService Implementation
+
+# 7 UserDetailService Implementation
+
+## 7.1 ApplicationUser (-> UserDetails)
+Öncelikle **ApplicationSecurityConfig** bölümünde bulunan **userDetailsService()** metodunun işlevini bir veri tabanı ile bir başka ifadeyle bir Repository ile çalışacak şekilde düzenliyoruz. 
+
+Bu çerçevede, öncelikle **UserDetails** interface yapısını implemente eden **ApplicationUser** isimli bir sınıf tanımı gerçekleştiriyoruz. Böylelikle **Spring** **Security** sınıfı içerisinde kullanabileceğimiz bir **UserDetails** sınıfı elde ediyoruz. 
+
+```java
+
+public class ApplicationUser implements UserDetails {
+
+    private final String username;
+    private final String password;
+    private final Set<? extends GrantedAuthority> grantedAuthorities;
+    private final boolean isAccountNonExpired;
+    private final boolean isAccountNonLocked;
+    private final boolean isCredentialsNonExpired;
+    private final boolean isEnabled;
+
+    public ApplicationUser(String username,
+            String password,
+            Set<? extends GrantedAuthority> grantedAuthorities,
+            boolean isAccountNonExpired,
+            boolean isAccountNonLocked,
+            boolean isCredentialsNonExpired,
+            boolean isEnabled) {
+        this.username = username;
+        this.password = password;
+        this.grantedAuthorities = grantedAuthorities;
+        this.isAccountNonExpired = isAccountNonExpired;
+        this.isAccountNonLocked = isAccountNonLocked;
+        this.isCredentialsNonExpired = isCredentialsNonExpired;
+        this.isEnabled = isEnabled;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return grantedAuthorities;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return isAccountNonExpired;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return isAccountNonLocked;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return isCredentialsNonExpired;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return isEnabled;
+    }
+}
+
+```
+
+## 7.2 ApplicationUserService (-> UserDetailsService)
+
+**UserDetails** sınıfını kullancak olan bir servis tanımı gerçekleştiriyoruz. Bu servis **UserDetailsService** interface yapısını implemente etmektedir ve sadece **loadByUsername()** metodunun implemente edilmesini gerektirmektedir. 
+
+> Servis katmanı üzerinde bu işlemi gerçekleştiriyoruz.
+
+```java
+@Override
+public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    return applicationUserDao
+            .selectApplicationUserByUsername(username)
+            .orElseThrow(() -> new UsernameNotFoundException(String.format("Username %s not found", username)));
+}
+```
+> Burada önemli olan bir nokta Repository tanımının bir interface aracılığıyla bu sınıf içerisinde kullanılmasıdır. Herhangi bir Repository ile çalışmak için **ApplicationUserDao** isimli bir interface yapısı bu çerçevde tanımlanır. 
+
+## 7.3. ApplicationUserDao
+**ApplicationUserService** içerisinde tanımlanan tek metot olan **loadByUsername** metodu içerisinde kullanılmak üzere; kullanıcıyı seçmek amacıyla bir metot imzası içerir. 
+
+```java
+public interface ApplicationUserDao {
+    Optional<ApplicationUser> selectApplicationUserByUsername(String username);
+}
+```
+
+## 7.4. FakeApplicationUserDaoService
+**ApplicationUserDao** interface yapısını uygulayan sınıftır. Bu sınıf içerisinde bir servisten ya da bir Repo üzerinden kullanıcılar alınabilir. 
+
+Mevcut uygulamada bir private metot içerisinde kullanıcıların manuel olarak oluşturulması sağlanmıştır. 
+
+```java
+package com.bookstore.api.services;
+
+import com.bookstore.api.security.ApplicationUser;
+import com.bookstore.api.services.Abstract.ApplicationUserDao;
+import com.google.common.collect.Lists;
+
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
+
+import static com.bookstore.api.security.ApplicationUserRole.*;
+
+@Repository("fake")
+@RequiredArgsConstructor
+public class FakeApplicationUserDaoService implements ApplicationUserDao {
+
+    private final PasswordEncoder passwordEncoder;
+
+    public Optional<ApplicationUser> selectApplicationUserByUsername(String username) {
+        return getApplicationUsers()
+                .stream()
+                .filter(applicationUser -> username.equals(applicationUser.getUsername()))
+                .findFirst();
+    }
+
+    private List<ApplicationUser> getApplicationUsers() {
+        List<ApplicationUser> applicationUsers = Lists.newArrayList(
+                new ApplicationUser(
+                        "admin",
+                        passwordEncoder.encode("admin123456"),
+                        ADMIN.getGrantedAuthorities(),
+                        true,
+                        true,
+                        true,
+                        true),
+                new ApplicationUser(
+                        "editor",
+                        passwordEncoder.encode("editor123456"),
+                        EDITOR.getGrantedAuthorities(),
+                        true,
+                        true,
+                        true,
+                        true),
+                new ApplicationUser(
+                        "user",
+                        passwordEncoder.encode("user123456"),
+                        USER.getGrantedAuthorities(),
+                        true,
+                        true,
+                        true,
+                        true));
+        return applicationUsers;
+    }
+}
+```
+
+> Dikkate edilirse tanımlanan somut Repository("Fake") olarak isimlendirilmiştir. **ApplicationUserService** gidildiğinde bu alanın **@Qualifier("fake")** ile özellikle vurgulandığı görülmektedir. Yani birden fazla Repository olması durumunda özellikle kullanılacak olan Repository kesin bir şekilde ifade edilmiştir. 
+
+```java
+    private final ApplicationUserDao applicationUserDao;
+
+    @Autowired
+    public ApplicationUserService(@Qualifier("fake") ApplicationUserDao applicationUserDao) {
+        this.applicationUserDao = applicationUserDao;
+    }
+```
