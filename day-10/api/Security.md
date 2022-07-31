@@ -1073,4 +1073,5 @@ Daha sonra **configure** metodu üzerinde değişiklikler yapılır.
 application.jwt.secretKey=springsecurityspringsecurityspringsecurityspringsecurityspringsecurityspringsecurity
 application.jwt.tokenPrefix=Bearer 
 application.jwt.tokenExpirationAfterDays=10
+application.jwt.refresh.token.expires.in=604800
 ```
