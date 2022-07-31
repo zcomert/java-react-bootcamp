@@ -624,3 +624,66 @@ public class FakeApplicationUserDaoService implements ApplicationUserDao {
         this.applicationUserDao = applicationUserDao;
     }
 ```
+# 8 UserDetails için Dao Implementasyonu
+Bu adımda MySQL üzerinde kullanıcıları ve rolleri organize ediyoruz. 
+
+## 8.1. Entities, Repositories, Services ve Controllers Tanımları
+- **User** **ve** **Role** sınıflarını projemize ekliyoruz. Bu sınıfları entities paketi altında topluyoruz. 
+- **User** ve **Role** için **UserRepostiroy** ve **RoleRepository** interface yapılarını **JpaRepository** kullanarak tanımlıyoruz. 
+- **UserService** tanımını gerçekleştiriyoruz ve bunun **services** klasörü altında yapıyoruz. 
+- **UsersController** tanımı yapıp içerisinde ilgili metot tanımlarını **controllers** paketi altında gerçekleştiriyoruz.
+
+## 8.3. ApplicationUserDao Implementasyonu
+Uygulamamızın artık kullanıcı verilerini **MySQL** veritabanınından almasını istiyoruz. Bu amaçla öncelikle daha önce implemente ettiğimiz **UserService** sınıfına gidip **ApplicationUserDao** interface yapısını burada implemente edeceğimizi ifade ediyoruz. 
+
+Aynı zamanda sistemde bulunan **Fake** repository tanımının geçerisiz olmasını sağlamak amacıyla **@Repository("mysql")** ifadesini burada kullanıyoruz. ****
+
+```java
+@Service
+@Repository("mysql")
+public class UserService implements ApplicationUserDao {
+
+}
+```
+
+Bu interface yapısını kabul ettiğimizde **selectApplicationUserByUsername** metodunu aslında garanti etmiş oluyoruz. Bu noktada artık ilgili metodun implemente edilmesi gerekir. Metot gövdesi aşağıdaki gibi implemente edilir. 
+
+```java
+@Override
+public Optional<ApplicationUser> selectApplicationUserByUsername(String username) {
+
+    User user = userRepository.findByUserName(username);
+
+    Set<SimpleGrantedAuthority> grantedAuthorities = null;
+    Set<Role> roles = user.getRoles();
+
+    for (Role role : roles) {
+        switch (role.getId()) {
+            case 1:
+                grantedAuthorities.addAll(ADMIN.getGrantedAuthorities());
+                break;
+            case 2:
+                grantedAuthorities.addAll(EDITOR.getGrantedAuthorities());
+                break;
+            case 3:
+                grantedAuthorities.addAll(USER.getGrantedAuthorities());
+                break;
+            default:
+                break;
+        }
+
+    }
+
+    Optional<ApplicationUser> applicationUser = Optional.ofNullable(new ApplicationUser(
+            user.getUserName(),
+            user.getPassword(),
+            grantedAuthorities,
+            true,
+            true,
+            true,
+            true));
+
+    return applicationUser;
+}
+```
+Burada önemli bir noktanın altını çizelim. Aslında senoryomuzda bir kullanıcının birden fazla rolü olabileceğini dikkate alarak bir kurgu oluşturduk ama burada sadece tek bir rolü seçeçek şekilde bir implementasyon yaptık. Eğer birden fazla kullanıcı rolünü bir kullanıcı üzerinde tanımlamak isterseniz yapmanız gereken 
