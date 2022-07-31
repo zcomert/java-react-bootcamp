@@ -20,6 +20,7 @@ import com.bookstore.api.services.Abstract.AuthorService;
 @RestController
 @RequestMapping("api/v1/authors")
 @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+// @PreAuthorize("permitAll()")
 public class AuthorController {
 
     private final AuthorService authorService;

@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.validation.constraints.NotNull;
 
 import com.bookstore.api.entities.Author;
+import com.bookstore.api.entities.User;
 import com.bookstore.api.entities.models.ApiResponse;
 
 public interface AuthorService {
@@ -20,4 +21,5 @@ public interface AuthorService {
     void deleteOneAuthor(int id);
 
     Set<Author> getAuthorsByIds(List<Integer> authorIds);
+
 }

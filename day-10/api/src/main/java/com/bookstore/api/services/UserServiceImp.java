@@ -14,7 +14,6 @@ import com.bookstore.api.exceptions.notFoundExceptions.UserNotFoundException;
 import com.bookstore.api.repositories.RoleRepository;
 import com.bookstore.api.repositories.UserRepository;
 import com.bookstore.api.security.ApplicationUser;
-import com.bookstore.api.services.Abstract.ApplicationUserDao;
 import com.bookstore.api.services.Abstract.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -86,12 +85,20 @@ public class UserServiceImp implements UserService {
         return ApiResponse.default_ACCEPTED(mapper.map(user, UserDto.class));
     }
 
+    @Override
     public void deleteOneUser(int userId) {
         userRepository.deleteById(userId);
     }
 
+    @Override
     public User getOneUserByUserName(String userName) {
         return userRepository.findByUserName(userName);
+    }
+
+    @Override
+    public User saveOneUser(User newUser) {
+        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
+        return userRepository.save(newUser);
     }
 
     @Override

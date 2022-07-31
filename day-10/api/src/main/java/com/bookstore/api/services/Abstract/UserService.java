@@ -14,4 +14,11 @@ public interface UserService extends ApplicationUserDao {
     ApiResponse<UserDto> postOneUser(User user);
 
     ApiResponse<UserDto> putOneUser(int userId, User user);
+
+    User getOneUserByUserName(String userName);
+
+    void deleteOneUser(int userId);
+
+    User saveOneUser(User user);
+
 }

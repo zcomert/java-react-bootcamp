@@ -783,7 +783,7 @@ public Optional<ApplicationUser> selectApplicationUserByUsername(String username
 
     User user = userRepository.findByUserName(username);
 
-    Set<SimpleGrantedAuthority> grantedAuthorities = null;
+    Set<SimpleGrantedAuthority> grantedAuthorities = new HashSet<>();;
     Set<Role> roles = user.getRoles();
 
     for (Role role : roles) {
