@@ -624,6 +624,28 @@ public class FakeApplicationUserDaoService implements ApplicationUserDao {
         this.applicationUserDao = applicationUserDao;
     }
 ```
+
+## 7.5 Application Security Config Güncelleme 
+ApplicationSecurityConfig içerinde **AuthenticationManagerBuilder** kullanılarak oturum açma için bir veri servisine bağlanılacağı bildirilir. 
+
+```java
+
+@Override
+protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(daoAuthenticationProvider());
+}
+
+@Bean
+public DaoAuthenticationProvider daoAuthenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setPasswordEncoder(passwordEncoder);
+        provider.setUserDetailsService(applicationUserService);
+        return provider;
+}
+```
+
+> #### ApplicationUserService içerisinde birden fazla kaynak var ise @Qualifier("fake") annotation yapısı ile hangi dao implementasyonunun kullanılacağı belirlenir. 
+
 # 8 UserDetails için Dao Implementasyonu
 Bu adımda MySQL üzerinde kullanıcıları ve rolleri organize ediyoruz. 
 
@@ -639,11 +661,118 @@ Uygulamamızın artık kullanıcı verilerini **MySQL** veritabanınından almas
 Aynı zamanda sistemde bulunan **Fake** repository tanımının geçerisiz olmasını sağlamak amacıyla **@Repository("mysql")** ifadesini burada kullanıyoruz. ****
 
 ```java
+
+import static com.bookstore.api.security.ApplicationUserRole.*;
+
 @Service
+@RequiredArgsConstructor
 @Repository("mysql")
-public class UserService implements ApplicationUserDao {
+public class UserServiceImp implements ApplicationUserDao, UserService {
+
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final ModelMapper mapper;
+
+    @Override
+    public ApiResponse<List<UserDto>> getAllUsers() {
+        List<User> users = userRepository.findAll();
+
+        List<UserDto> list = users
+                .stream()
+                .map(user -> mapper.map(user, UserDto.class))
+                .collect(Collectors.toList());
+
+        return ApiResponse.default_OK(list);
+    }
+
+    @Override
+    public ApiResponse<UserDto> getOneUser(int userId) {
+        User user = userRepository
+                .findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+
+        UserDto userDto = mapper.map(user, UserDto.class);
+
+        return ApiResponse.default_OK(userDto);
+    }
+
+    @Override
+    public ApiResponse<UserDto> postOneUser(User user) {
+        Set<Role> roles = new HashSet<>();
+        Role role = roleRepository.findByName("USER");
+        if (role == null) {
+            throw new RuntimeException("USER role is not defined.");
+        }
+        roles.add(role);
+        user.setRoles(roles);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+        return ApiResponse.default_CREATED(mapper.map(user, UserDto.class));
+    }
+
+    @Override
+    public ApiResponse<UserDto> putOneUser(int userId, User user) {
+        getOneUser(userId);
+
+        Set<Role> roles = roleRepository.findByIdIn(user.getRoles());
+        user.setId(userId);
+        user.setRoles(roles);
+
+        userRepository.save(user);
+        return ApiResponse.default_ACCEPTED(mapper.map(user, UserDto.class));
+    }
+
+    public void deleteOneUser(int userId) {
+        userRepository.deleteById(userId);
+    }
+
+    public User getOneUserByUserName(String userName) {
+        return userRepository.findByUserName(userName);
+    }
+
+    @Override
+    public Optional<ApplicationUser> selectApplicationUserByUsername(String username) {
+
+        User user = userRepository.findByUserName(username);
+
+        Set<SimpleGrantedAuthority> grantedAuthorities = null;
+        Set<Role> roles = user.getRoles();
+
+        for (Role role : roles) {
+            switch (role.getId()) {
+                case 1:
+                    grantedAuthorities.addAll(ADMIN.getGrantedAuthorities());
+                    break;
+                case 2:
+                    grantedAuthorities.addAll(EDITOR.getGrantedAuthorities());
+                    break;
+                case 3:
+                    grantedAuthorities.addAll(USER.getGrantedAuthorities());
+                    break;
+                default:
+                    break;
+            }
+
+        }
+
+        Optional<ApplicationUser> applicationUser = Optional.ofNullable(new ApplicationUser(
+                user.getUserName(),
+                user.getPassword(),
+                grantedAuthorities,
+                true,
+                true,
+                true,
+                true));
+
+        return applicationUser;
+    }
 
 }
+
+
+
+
 ```
 
 Bu interface yapısını kabul ettiğimizde **selectApplicationUserByUsername** metodunu aslında garanti etmiş oluyoruz. Bu noktada artık ilgili metodun implemente edilmesi gerekir. Metot gövdesi aşağıdaki gibi implemente edilir. 
@@ -686,4 +815,262 @@ public Optional<ApplicationUser> selectApplicationUserByUsername(String username
     return applicationUser;
 }
 ```
-Burada önemli bir noktanın altını çizelim. Aslında senoryomuzda bir kullanıcının birden fazla rolü olabileceğini dikkate alarak bir kurgu oluşturduk ama burada sadece tek bir rolü seçeçek şekilde bir implementasyon yaptık. Eğer birden fazla kullanıcı rolünü bir kullanıcı üzerinde tanımlamak isterseniz yapmanız gereken 
+
+![BasicAuthWithDao](http://www.zafercomert.com/medya/java/springSecurity-BasicAuthWithDao.svg)
+
+# 9 JWT
+
+## 9.1. [Java JWT: JSON Web Token for Java and Android](https://github.com/jwtk/jjwt)
+
+Öncelikle bağımlılıkların sisteme eklenmesi gerekir.
+
+```xml
+<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt-api</artifactId>
+    <version>0.11.5</version>
+</dependency>
+<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt-impl</artifactId>
+    <version>0.11.5</version>
+    <scope>runtime</scope>
+</dependency>
+<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt-jackson</artifactId>
+    <version>0.11.5</version>
+    <scope>runtime</scope>
+</dependency>
+```
+
+## 9.2. [JWT IO](https://jwt.io/)
+
+JWT Header, Payload ve VERIFY SIGNATURE bölümlerinden oluşur.
+
+## 9.3. UsernameAndPasswordAuthenticationRequest
+
+Kullanıcı adı ve şifre taleplerini iletmek üzere bir request nesnesi oluşturulur.
+
+```java
+@Data
+@NoArgsConstructor
+public class UsernameAndPasswordAuthenticationRequest {
+
+    private String username;
+    private String password;
+}
+```
+
+## 9.4. JwtUsernameAndPasswordAuthenticationFilter
+
+- **JwtUsernameAndPasswordAuthenticationFilter** sınıfı öncelikle **UsernameAndPasswordAuthenticationRequest** nesnesinden gelen kullanıcı adı ve şifresini **ObjectMapper** aracılığıyla okur ve **Authentication** nesnesi oluşturur.
+
+- Oluşturulan **Authentication** nesnesi **AuthenticationManager** aracılığıyla oturum açmak üzere kullanılır.
+
+- Authentication bir interface yapısıdır. Bu interface farklı sınıflar tarafından implemente edilir ([Authentication](https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/core/Authentication.html)).
+  - AbstractAuthenticationToken,
+  - AbstractOAuth2TokenAuthenticationToken,
+  - AnonymousAuthenticationToken,
+  - BearerTokenAuthentication,
+  - BearerTokenAuthenticationToken,
+  - CasAssertionAuthenticationToken,
+  - CasAuthenticationToken,
+  - JaasAuthenticationToken,
+  - JwtAuthenticationToken,
+  - OAuth2AuthenticationToken,
+  - OAuth2AuthorizationCodeAuthenticationToken,
+  - OAuth2LoginAuthenticationToken,
+  - OpenIDAuthenticationToken,
+  - PreAuthenticatedAuthenticationToken,
+  - RememberMeAuthenticationToken,
+  - RunAsUserToken,
+  - Saml2Authentication,
+  - Saml2AuthenticationToken,
+  - TestingAuthenticationToken,
+  - _UsernamePasswordAuthenticationToken_
+
+> **AuthenticationManager.authenticate(Authentication)** bu metot çalıştığı anda oturum açma isteği iletilir.
+
+Bu noktaya kadar istemciden -> sunucuya istek kullanıcı bilgilerini (credentials) içerik şekilde iletilir. Dolasıyla bir sonraki adımda kullanıcı bilgilerinin sunucu tarafında doğrulanması gerekir. Doğrulama işlemi başarılı olursa üretilen JWT token istemciye gönderilir.
+
+Eğer oturum açma işlemi başarılı olursa bir başka ifadeyle kullanıcı bilgileri (credentials) ifadeleri doğrulanırsa, **successfulAuthentication** metodu çalıştırılır.
+
+Bu metot içerisinde JWT Token oluşturulur. Oluşturulan token Header eklenir. 
+
+Dolasıyla JwtUsernameAndPasswordAuthenticationFilter tasarımı bu şekilde tamamlanır. 
+
+
+```java
+public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+
+    private final AuthenticationManager authenticationManager;
+    private final JwtConfig jwtConfig;
+    private final SecretKey secretKey;
+
+    public JwtUsernameAndPasswordAuthenticationFilter(AuthenticationManager authenticationManager,
+            JwtConfig jwtConfig,
+            SecretKey secretKey) {
+        this.authenticationManager = authenticationManager;
+        this.jwtConfig = jwtConfig;
+        this.secretKey = secretKey;
+    }
+
+    @Override
+    public Authentication attemptAuthentication(HttpServletRequest request,
+            HttpServletResponse response) throws AuthenticationException {
+
+        try {
+            UsernameAndPasswordAuthenticationRequest authenticationRequest = new ObjectMapper()
+                    .readValue(request.getInputStream(), UsernameAndPasswordAuthenticationRequest.class);
+
+            Authentication authentication = new UsernamePasswordAuthenticationToken(
+                    authenticationRequest.getUsername(),
+                    authenticationRequest.getPassword());
+
+            Authentication authenticate = authenticationManager.authenticate(authentication);
+            return authenticate;
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    @Override
+    protected void successfulAuthentication(HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain chain,
+            Authentication authResult) throws IOException, ServletException {
+
+        String token = Jwts.builder()
+                .setSubject(authResult.getName())
+                .claim("authorities", authResult.getAuthorities())
+                .setIssuedAt(new Date())
+                .setExpiration(java.sql.Date.valueOf(LocalDate.now().plusDays(jwtConfig.getTokenExpirationAfterDays())))
+                .signWith(secretKey)
+                .compact();
+
+        response.addHeader(jwtConfig.getAuthorizationHeader(), jwtConfig.getTokenPrefix() + token);
+    }
+}
+
+```
+## 9.5. JwtConfig
+JWT yapılandırılmasını sağlamak üzere JwtConfig sınıfı düzenlenir. 
+
+```java
+
+@ConfigurationProperties(prefix = "application.jwt")
+public class JwtConfig {
+
+    private String secretKey;
+    private String tokenPrefix;
+    private Integer tokenExpirationAfterDays;
+
+    public JwtConfig() {
+    }
+
+    public String getSecretKey() {
+        return secretKey;
+    }
+
+    public void setSecretKey(String secretKey) {
+        this.secretKey = secretKey;
+    }
+
+    public String getTokenPrefix() {
+        return tokenPrefix;
+    }
+
+    public void setTokenPrefix(String tokenPrefix) {
+        this.tokenPrefix = tokenPrefix;
+    }
+
+    public Integer getTokenExpirationAfterDays() {
+        return tokenExpirationAfterDays;
+    }
+
+    public void setTokenExpirationAfterDays(Integer tokenExpirationAfterDays) {
+        this.tokenExpirationAfterDays = tokenExpirationAfterDays;
+    }
+
+    public String getAuthorizationHeader() {
+        return HttpHeaders.AUTHORIZATION;
+    }
+}
+
+```
+
+## 9.6. JwtSecretKey
+Anahtar değer ve şifreleme algoritması için JwtSecretKey sınıfı kullanılır. 
+
+```java
+@Configuration
+public class JwtSecretKey {
+
+    private final JwtConfig jwtConfig;
+
+    @Autowired
+    public JwtSecretKey(JwtConfig jwtConfig) {
+        this.jwtConfig = jwtConfig;
+    }
+
+    @Bean
+    public SecretKey secretKey() {
+        return Keys.hmacShaKeyFor(jwtConfig.getSecretKey().getBytes());
+    }
+}
+```
+
+## 9.7. ApplicationSecurityConfig ifadesinin yapılandırılması 
+Öncelikle yapılandırıcıya enjekte edilmesi gereken yapıların enjeksiyonu gerçekleştirilir. Temelde bir filtre yapısı istek zincirine eklenir ve Session yani oturum bilgisini STATELESS olarak ayarlanır. 
+
+```java
+private final PasswordEncoder passwordEncoder;
+private final ApplicationUserService applicationUserService;
+private final SecretKey secretKey;
+private final JwtConfig jwtConfig;
+
+@Autowired
+public ApplicationSecurityConfig(PasswordEncoder passwordEncoder,
+        ApplicationUserService applicationUserService,
+        SecretKey secretKey,
+        JwtConfig jwtConfig) {
+    this.passwordEncoder = passwordEncoder;
+    this.applicationUserService = applicationUserService;
+    this.secretKey = secretKey;
+    this.jwtConfig = jwtConfig;
+}
+```
+
+Daha sonra **configure** metodu üzerinde değişiklikler yapılır. 
+
+```java
+ @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .csrf().disable()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .addFilter(
+                        new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig, secretKey))
+                .addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfig),
+                        JwtUsernameAndPasswordAuthenticationFilter.class)
+                .authorizeRequests()
+                .antMatchers("/", "index", "/css/*", "/js/*").permitAll()
+                .antMatchers("/api/**").hasRole(USER.name())
+                .anyRequest()
+                .authenticated();
+    }
+```
+
+
+## Properties 
+
+```text
+application.jwt.secretKey=springsecurityspringsecurityspringsecurityspringsecurityspringsecurityspringsecurity
+application.jwt.tokenPrefix=Bearer 
+application.jwt.tokenExpirationAfterDays=10
+```

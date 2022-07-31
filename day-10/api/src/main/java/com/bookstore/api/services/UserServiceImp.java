@@ -6,8 +6,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.management.relation.RoleNotFoundException;
-
 import com.bookstore.api.entities.Role;
 import com.bookstore.api.entities.User;
 import com.bookstore.api.entities.dto.UserDto;
@@ -129,7 +127,6 @@ public class UserServiceImp implements ApplicationUserDao, UserService {
                 true,
                 true,
                 true));
-
         return applicationUser;
     }
 
