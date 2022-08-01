@@ -13,6 +13,10 @@ class CategoryService {
     const url = `${this.baseUrl}/${id}`;
     return await axios.delete(url).then((resp) => resp);
   }
+
+  async postOneCategory(category) {
+    return await axios.post(this.baseUrl, category).then((resp) => resp.data);
+  }
 }
 
 export default CategoryService;
