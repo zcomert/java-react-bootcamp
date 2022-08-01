@@ -1,8 +1,14 @@
-import { categories } from "../initialValues/categoryItems";
-import { DELETE_ONE_CATEOGRY, GET_ALL_CATEGORIES, POST_ONE_CATEGORY } from "../actions/categoryActions";
+import { categories, category } from "../initialValues/categoryItems";
+import {
+  DELETE_ONE_CATEOGRY,
+  GET_ALL_CATEGORIES,
+  GET_ONE_CATEGORY,
+  POST_ONE_CATEGORY,
+} from "../actions/categoryActions";
 
 const initialValue = {
   categories,
+  category,
 };
 
 function categoryReducer(state = initialValue, { type, payload }) {
@@ -10,18 +16,25 @@ function categoryReducer(state = initialValue, { type, payload }) {
     case GET_ALL_CATEGORIES:
       return {
         ...state,
-        categories : payload
+        categories: payload,
       };
     case DELETE_ONE_CATEOGRY:
       return {
         ...state,
-        categories : state.categories.filter(category => category.id!==payload)
-      }
+        categories: state.categories.filter(
+          (category) => category.id !== payload
+        ),
+      };
     case POST_ONE_CATEGORY:
-      return{
+      return {
         ...state,
-        categories : [...state.categories, payload]
-      }
+        categories: [...state.categories, payload],
+      };
+    case GET_ONE_CATEGORY:
+      return {
+        ...state,
+        category: payload,
+      };
     default:
       return {
         ...state,

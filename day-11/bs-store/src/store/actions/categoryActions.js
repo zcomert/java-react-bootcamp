@@ -1,6 +1,7 @@
 import CategoryService from "../../services/CategoryService";
 
 export const GET_ALL_CATEGORIES = "GET_ALL_CATEGORIES";
+export const GET_ONE_CATEGORY = "GET_ONE_CATEGORY";
 export const DELETE_ONE_CATEOGRY = "DELETE_ONE_CATEOGRY";
 export const POST_ONE_CATEGORY = "POST_ONE_CATEGORY";
 
@@ -11,6 +12,14 @@ export function getAllCategories(){
         categoryService.getAllCategories()
         .then(resp => resp.data)
         .then(resp => dispatch({type:GET_ALL_CATEGORIES, payload : resp}))
+    }
+}
+
+export function getOneCategory(id){
+    return function(dispatch){
+        categoryService.getOneCategory(id)
+        .then(resp => resp.data)
+        .then(resp => dispatch({type : GET_ONE_CATEGORY, payload: resp}))
     }
 }
 

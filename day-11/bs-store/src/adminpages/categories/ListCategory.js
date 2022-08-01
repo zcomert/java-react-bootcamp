@@ -22,6 +22,10 @@ export default function ListCategory() {
     categoryDispatch(deleteOneCategory(id));
   }
 
+  const handleEdit = (id) => {
+    navigate(`/admin/categories/update/${id}`);
+  }
+
   useEffect(() => {
     categoryDispatch(getAllCategories());
   }, []);
@@ -70,8 +74,8 @@ export default function ListCategory() {
                   <TableCell>{description}</TableCell>
                   <TableCell>
                     <ButtonGroup orientation="vertical" >
-                      <Button>Edit</Button>
-                      <Button onClick={()=>handleRemove(id)} >Remove</Button>
+                      <Button onClick={() => handleEdit(id)}>Edit</Button>
+                      <Button onClick={()=> handleRemove(id)} >Remove</Button>
                     </ButtonGroup>
                   </TableCell>
                 </TableRow>

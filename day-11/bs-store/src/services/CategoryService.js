@@ -9,6 +9,11 @@ class CategoryService {
     return await axios.get(this.baseUrl).then((resp) => resp.data);
   }
 
+  async getOneCategory(id){
+    const url = `${this.baseUrl}/${id}`;
+    return await axios.get(url).then((resp) => resp.data);
+  }
+
   async deleteOneCategory(id) {
     const url = `${this.baseUrl}/${id}`;
     return await axios.delete(url).then((resp) => resp);
@@ -17,6 +22,8 @@ class CategoryService {
   async postOneCategory(category) {
     return await axios.post(this.baseUrl, category).then((resp) => resp.data);
   }
+
+  
 }
 
 export default CategoryService;

@@ -17,6 +17,7 @@ import AddCategory from "./adminpages/categories/AddCategory";
 import SimpleSnackbar from "./components/snackBar/SimpleSnackbar";
 
 import {useSelector} from "react-redux";
+import UpdateCategory from "./adminpages/categories/UpdateCategory";
 
 
 function App() {
@@ -47,6 +48,7 @@ function App() {
         
         <Route path='/admin/categories/list' element={<ListCategory />} />
         <Route path='/admin/categories/add' element={<AddCategory />} />
+        <Route path='/admin/categories/update/:id' element={<UpdateCategory />} />
         
         <Route path='/admin/authors/list' element={<ListAuthor />} />
         <Route path='/admin/authors/add' element={<AddAuthor />} />
