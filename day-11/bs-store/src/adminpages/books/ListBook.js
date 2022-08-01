@@ -1,6 +1,7 @@
 import { Button } from '@mui/material'
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import ThemeMenu from '../../components/theme/ThemeMenu';
 import { setTheme} from "../../store/actions/settingActions";
 
 export default function ListBook() {
@@ -22,6 +23,12 @@ export default function ListBook() {
       </div>
       <div>
         <Button onClick={handleClick} variant="contained">Change Theme</Button>
+      </div>
+
+      <div>
+        {
+          <ThemeMenu />
+        }
       </div>
 
     </div>

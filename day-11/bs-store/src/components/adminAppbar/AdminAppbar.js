@@ -14,6 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { Link } from "react-router-dom";
 import {useNavigate} from "react-router-dom";
+import ThemeMenu from "../theme/ThemeMenu";
 
 const pages = ["Books", "Categories", "Authors"];
 const paths = [
@@ -166,7 +167,11 @@ const AdminAppbar = () => {
                 </MenuItem>
               ))}
             </Menu>
+
+           
+
           </Box>
+          { <ThemeMenu /> }
         </Toolbar>
       </Container>
     </AppBar>

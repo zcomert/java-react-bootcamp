@@ -70,7 +70,7 @@ export default function AddAuthor() {
   };
 
   const fab = {
-    color: "primary",
+    color: "secondary",
     sx: fabStyle,
     icon: <ArrowBackIcon />,
     label: "Add",

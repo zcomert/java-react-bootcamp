@@ -58,7 +58,7 @@ export default function ListAuthor() {
   };
 
   const fab = {
-    color: "primary",
+    color: "secondary",
     sx: fabStyle,
     icon: <AddIcon />,
     label: "Add",
