@@ -1,8 +1,9 @@
 import { GET_THEME, SET_THEME } from "../actions/settingActions";
-import {theme} from '../initialValues/settingItems'
+import {pageSize, theme} from '../initialValues/settingItems'
 
 const initialValue ={
-    theme
+    theme,
+    pageSize
 }
 
 export default function settingReducer(state=initialValue,{type,payload}){
