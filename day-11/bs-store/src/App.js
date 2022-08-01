@@ -13,6 +13,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import { Button, createTheme } from "@mui/material";
 import { blue, yellow } from "@mui/material/colors";
+import AddCategory from "./adminpages/categories/AddCategory";
 
 
 
@@ -41,7 +42,10 @@ function App() {
 
       <Routes>
         <Route path='/admin/books/list' element={<ListBook />} />
+        
         <Route path='/admin/categories/list' element={<ListCategory />} />
+        <Route path='/admin/categories/add' element={<AddCategory />} />
+        
         <Route path='/admin/authors/list' element={<ListAuthor />} />
         <Route path='/admin/authors/add' element={<AddAuthor />} />
         <Route path='/' element={<Home />} />
