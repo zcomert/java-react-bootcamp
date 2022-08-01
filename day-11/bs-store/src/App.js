@@ -14,12 +14,14 @@ import Box from "@mui/material/Box";
 import { Button, createTheme } from "@mui/material";
 import { blue, yellow } from "@mui/material/colors";
 import AddCategory from "./adminpages/categories/AddCategory";
+import SimpleSnackbar from "./components/snackBar/SimpleSnackbar";
 
+import {useSelector} from "react-redux";
 
 
 function App() {
   const { authors, setAuthors, isLoading, setIsLoading } = useContext(AppContext);
-
+  const {message} = useSelector(state => state.setting);
   return (
     <div>
       <AdminAppbar />
@@ -50,6 +52,8 @@ function App() {
         <Route path='/admin/authors/add' element={<AddAuthor />} />
         <Route path='/' element={<Home />} />
       </Routes>
+
+      <SimpleSnackbar message={message} showSnackbar={false} />
     </div>
   );
 }
