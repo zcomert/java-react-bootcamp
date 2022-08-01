@@ -1,14 +1,21 @@
-import React from 'react'
-import {useSelector} from "react-redux";
+import React,{useEffect} from 'react'
+import {useSelector, useDispatch} from "react-redux";
+import {getAllCategories} from "../../store/actions/categoryActions";
 
 export default function ListCategory() {
-  const {theme, pageSize} = useSelector(state => state.setting);
+  const {categories} = useSelector(state => state.category);
+  const categoryDispatch = useDispatch();
+
+  useEffect(() => {
+    categoryDispatch(getAllCategories())
+  },[]);
+
   return (
     <div>
       ListCategory
       
-      <div>{theme}</div>
-      <div>{pageSize}</div>
+      <div>{categories.length}</div>
+     
     </div>
   )
 }
