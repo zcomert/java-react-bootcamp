@@ -19,8 +19,7 @@ export default function ThemeMenu() {
 
   return (
     <div>
-      <Button
-        id="demo-positioned-button"
+      <Button sx={{color:'#fff'}}        id="demo-positioned-button"
         aria-controls={open ? 'demo-positioned-menu' : undefined}
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}

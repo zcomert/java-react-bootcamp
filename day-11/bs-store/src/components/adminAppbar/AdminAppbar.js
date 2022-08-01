@@ -13,7 +13,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { Link } from "react-router-dom";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ThemeMenu from "../theme/ThemeMenu";
 
 const pages = ["Books", "Categories", "Authors"];
@@ -23,7 +23,7 @@ const paths = [
   "/admin/authors/list",
 ];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
- 
+
 const AdminAppbar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -44,8 +44,6 @@ const AdminAppbar = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-
-  
 
   return (
     <AppBar position='static'>
@@ -99,11 +97,9 @@ const AdminAppbar = () => {
                 display: { xs: "block", md: "none" },
               }}
             >
-              {pages.map((page,index) => (
-                <MenuItem key={page} onClick={() =>handleCloseNavMenu(index)}>
-                  <Typography textAlign='center'>
-                    {page}
-                    </Typography>
+              {pages.map((page, index) => (
+                <MenuItem key={page} onClick={() => handleCloseNavMenu(index)}>
+                  <Typography textAlign='center'>{page}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -128,7 +124,7 @@ const AdminAppbar = () => {
             BS Store
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page,index) => (
+            {pages.map((page, index) => (
               <Button
                 key={page}
                 onClick={() => handleCloseNavMenu(index)}
@@ -167,11 +163,9 @@ const AdminAppbar = () => {
                 </MenuItem>
               ))}
             </Menu>
-
-           
-
+            
           </Box>
-          { <ThemeMenu /> }
+          <ThemeMenu />
         </Toolbar>
       </Container>
     </AppBar>
