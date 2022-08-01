@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getAllCategories } from "../../store/actions/categoryActions";
+import { deleteOneCategory, getAllCategories } from "../../store/actions/categoryActions";
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -14,6 +14,10 @@ import { Button, ButtonGroup } from "@mui/material";
 export default function ListCategory() {
   const { categories } = useSelector((state) => state.category);
   const categoryDispatch = useDispatch();
+
+  const handleRemove = (id) => {
+    categoryDispatch(deleteOneCategory(id));
+  }
 
   useEffect(() => {
     categoryDispatch(getAllCategories());
@@ -42,7 +46,7 @@ export default function ListCategory() {
                   <TableCell>
                     <ButtonGroup orientation="vertical" >
                       <Button>Edit</Button>
-                      <Button>Remove</Button>
+                      <Button onClick={()=>handleRemove(id)} >Remove</Button>
                     </ButtonGroup>
                   </TableCell>
                 </TableRow>
