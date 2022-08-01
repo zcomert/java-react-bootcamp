@@ -7,41 +7,16 @@ class AuthorService {
 
   async getAllAuthors() {
     return await axios
-      .get(this.baseUrl,{
-        headers:{
-          'Authorization':'Basic ' + btoa("admin" + ':' + "admin123456")
-        }
-      })
-      .then((resp) => resp.data)
-      .catch((err) => console.log(err));
-  }
-
-  async getOneAuthor(id) {
-    const url = `${this.baseUrl}/${id}`;
-    return await axios
-      .get(url)
+      .get(this.baseUrl)
       .then((resp) => resp.data)
       .catch((err) => console.log(err));
   }
 
   async postOneAuthor(payload) {
-    return axios
+    return await axios
       .post(this.baseUrl, payload)
       .then((resp) => resp.data)
       .catch((err) => console.log(err));
-  }
-
-  async putOneAuthor(id, payload) {
-    const url = `${this.baseUrl}/${id}`;
-    return axios
-      .put(url, payload)
-      .then((resp) => resp.data)
-      .catch((err) => console.log(err));
-  }
-
-  async deleteOneAuthor(id) {
-    const url = `${this.baseUrl}/${id}`;
-    return await axios.delete(url).then((resp) => resp);
   }
 }
 

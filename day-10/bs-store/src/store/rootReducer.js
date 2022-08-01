@@ -1,10 +1,12 @@
 import { combineReducers } from "redux";
-import authorReducer from "./reducers/authorReducer"
 import settingReducer from "./reducers/settingReducer";
+import categoryReducer from "./reducers/categoryReducer";
+import bookReducer from "./reducers/bookReducer";
 
 const rootReducer = combineReducers({
-    author : authorReducer,
-    setting: settingReducer
+  setting: settingReducer,
+  category: categoryReducer,
+  book: bookReducer,
 });
 
 export default rootReducer;
