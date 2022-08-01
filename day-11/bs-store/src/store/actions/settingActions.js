@@ -1,6 +1,7 @@
 export const SET_THEME = "SET_THEME";
 export const GET_THEME = "GET_THEME";
 export const SET_MESSAGE = "SET_MESSAGE";
+export const CLOSE_SNACKBAR = "CLOSE_SNACKBAR";
 
 export function setTheme(theme) {
   return function (dispatch) {
@@ -18,4 +19,10 @@ export function setMessage(msg) {
   return function (dispatch) {
     dispatch({ type: SET_MESSAGE, payload: msg });
   };
+}
+
+export function closeSnackBar(){
+  return function(dispatch){
+    dispatch({type:CLOSE_SNACKBAR});
+  }
 }

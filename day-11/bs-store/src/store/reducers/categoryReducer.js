@@ -4,6 +4,7 @@ import {
   GET_ALL_CATEGORIES,
   GET_ONE_CATEGORY,
   POST_ONE_CATEGORY,
+  PUT_ONE_CATEGORY,
 } from "../actions/categoryActions";
 
 const initialValue = {
@@ -35,6 +36,15 @@ function categoryReducer(state = initialValue, { type, payload }) {
         ...state,
         category: payload,
       };
+    case PUT_ONE_CATEGORY:
+      return {
+        ...state,
+        categories: [
+          ...state.categories.filter((category) => category.id !== payload.id),
+          payload,
+        ],
+      };
+
     default:
       return {
         ...state,

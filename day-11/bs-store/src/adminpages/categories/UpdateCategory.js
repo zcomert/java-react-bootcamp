@@ -2,13 +2,15 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Button, Grid, Box, Stack, TextField } from "@mui/material";
 import React from "react";
-import { getOneCategory, postOneCategory } from "../../store/actions/categoryActions";
+import { getOneCategory, putOneCategory } from "../../store/actions/categoryActions";
 import { useNavigate, useParams } from "react-router-dom";
 import SimpleSnackbar from "../../components/snackBar/SimpleSnackbar";
 import { setMessage } from "../../store/actions/settingActions";
 
+
 export default function UpdateCategory() {
   const categoryDispatch = useDispatch();
+  const navigate = useNavigate();
   
   const { message } = useSelector((state) => state.setting);
   const {category} = useSelector(state => state.category);
@@ -21,7 +23,6 @@ export default function UpdateCategory() {
 
   useEffect(() => {
     categoryDispatch(getOneCategory(id))
-    
     setForm({
         categoryName: category.categoryName,
         description : category.description
@@ -36,8 +37,9 @@ export default function UpdateCategory() {
   };
 
   const handleClick = () => {
-    categoryDispatch(postOneCategory(form));
-    categoryDispatch(setMessage("Category has been added."));
+    categoryDispatch(putOneCategory(id,form));
+    categoryDispatch(setMessage("Category has been updated."));
+    navigate("/admin/categories/list");
   };
 
   return (
@@ -60,8 +62,6 @@ export default function UpdateCategory() {
         <Button onClick={handleClick} variant='contained'>
           Save
         </Button>
-
-        {JSON.stringify(form)}
       </Stack>
     </Box>
   );

@@ -23,6 +23,12 @@ class CategoryService {
     return await axios.post(this.baseUrl, category).then((resp) => resp.data);
   }
 
+  async putOneCategory(id,category){
+    const url = `${this.baseUrl}/${id}`;
+    console.log(url)
+    return await axios.put(url,category).then(resp => resp.data);
+  }
+
   
 }
 

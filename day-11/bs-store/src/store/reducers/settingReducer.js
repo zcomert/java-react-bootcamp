@@ -1,10 +1,11 @@
-import { GET_THEME, SET_MESSAGE, SET_THEME } from "../actions/settingActions";
-import {pageSize, theme, message} from '../initialValues/settingItems'
+import { CLOSE_SNACKBAR, GET_THEME, SET_MESSAGE, SET_THEME } from "../actions/settingActions";
+import {pageSize, theme, message, showSnackbar} from '../initialValues/settingItems'
 
 const initialValue ={
     theme,
     pageSize,
-    message
+    message,
+    showSnackbar
 }
 
 export default function settingReducer(state=initialValue,{type,payload}){
@@ -21,7 +22,15 @@ export default function settingReducer(state=initialValue,{type,payload}){
         case SET_MESSAGE:{
             return{
                 ...state,
-                message : payload
+                message : payload,
+                showSnackbar : true
+            }
+        }
+        case CLOSE_SNACKBAR:{
+            return {
+                ...state,
+                showSnackbar:false,
+                message:''
             }
         }
         default:

@@ -66,9 +66,6 @@ export default function ListAuthor() {
 
   return (
     <div>
-      <div>{theme}</div>
-      <div>{pageSize}</div>
-
       <Fab
         sx={fab.sx}
         aria-label={fab.label}

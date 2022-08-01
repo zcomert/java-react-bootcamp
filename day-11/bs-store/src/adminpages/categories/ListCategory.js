@@ -12,6 +12,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Button, ButtonGroup, Fab } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { setMessage } from "../../store/actions/settingActions";
 
 export default function ListCategory() {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ export default function ListCategory() {
 
   const handleRemove = (id) => {
     categoryDispatch(deleteOneCategory(id));
+    categoryDispatch(setMessage("Category has been removed."));
   }
 
   const handleEdit = (id) => {

@@ -22,7 +22,7 @@ import UpdateCategory from "./adminpages/categories/UpdateCategory";
 
 function App() {
   const { authors, setAuthors, isLoading, setIsLoading } = useContext(AppContext);
-  const {message} = useSelector(state => state.setting);
+  const {message, showSnackbar} = useSelector(state => state.setting);
   return (
     <div>
       <AdminAppbar />
@@ -55,7 +55,7 @@ function App() {
         <Route path='/' element={<Home />} />
       </Routes>
 
-      <SimpleSnackbar message={message} showSnackbar={false} />
+      <SimpleSnackbar message={message} showSnackbar={showSnackbar} />
     </div>
   );
 }
