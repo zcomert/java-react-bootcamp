@@ -1,118 +1,166 @@
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import Grid from "@mui/material/Grid";
-import { getAllCategories } from "../../store/actions/categoryActions";
-import { getAllAuthors } from "../../store/actions/authorActions";
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Stack,
+  TextField,
+} from "@mui/material";
+import Select from "@mui/material/Select";
+import { useFormik } from "formik";
+import React, { useState, useEffect } from "react";
+import AuthorService from "../../services/AuthorService";
+import CategoryService from "../../services/CategoryService";
 
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
-import {
-  Button,
-  InputLabel,
-  MenuItem,
-  OutlinedInput,
-  Select,
-  Stack,
-  TextField,
-} from "@mui/material";
-import { useFormik } from "formik";
-import validationSchema from "./AddBookValidation";
-
+import BookService from "../../services/BookService";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { postOneBook } from "../../store/actions/bookActions";
+import { validationSchema } from "./AddBookValidation";
+import SimpleFab from "../../components/fab/SimpleFab";
 export default function AddBook() {
-  const { categories } = useSelector((state) => state.category);
-  const { authors } = useSelector((state) => state.author);
+  const navigate = useNavigate();
+
+  const selector = useSelector((state) => state.book);
   const bookDispatch = useDispatch();
+
+  const [authors, setAuthors] = useState([]);
+  const [categories, setCategories] = useState([]);
+
+  const authorService = new AuthorService();
+  const categoryService = new CategoryService();
+  const bookService = new BookService();
 
   const { handleSubmit, handleChange, handleBlur, values, errors, touched } =
     useFormik({
       initialValues: {
-        title: "",
-        price: "",
-        publisher: "",
+        authorIds: [],
         categoryId: "",
-        bookAuthors: [],
+        title: "",
+        price: 0,
+        publisher: "",
       },
-      onSubmit: (values) => {
+      onSubmit: async (values) => {
         console.log(values);
+        bookDispatch(postOneBook(values));
+        // navigate("/admin/books/list");
       },
-      validationSchema,
     });
 
   useEffect(() => {
-    bookDispatch(getAllCategories());
-    bookDispatch(getAllAuthors());
+    authorService.getAllAuthors().then((resp) => setAuthors(resp.data));
+    categoryService.getAllCategories().then((resp) => setCategories(resp.data));
   }, []);
 
   return (
     <form onSubmit={handleSubmit}>
-      <input
-        id='title'
-        type='title'
-        value={values.title}
-        onChange={handleChange}
-        onBlur={handleBlur}
-      />
+      <Box sx={{ m: 2 }}>
+        <Grid container spacing={3}>
+          <Grid item xs={3}>
+            <Stack direction='column' spacing={2}>
+              <FormControl>
+                <FormLabel id='categories'>Categories</FormLabel>
+                <RadioGroup
+                  aria-labelledby='categories'
+                  defaultValue='4'
+                  name='categoryId'
+                >
+                  {categories.map((category) => (
+                    <FormControlLabel
+                      key={category.id}
+                      value={category.id}
+                      control={<Radio />}
+                      label={category.categoryName}
+                      onChange={handleChange}
+                    />
+                  ))}
+                </RadioGroup>
+              </FormControl>
 
-      {errors.title && touched.title && (
-        <div className='error'> {errors.title}</div>
-      )}
+              <FormControl fullWidth sx={{ width: "100%" }}>
+                <InputLabel id='authorIds'>Authors</InputLabel>
+                <Select
+                  name='authorIds'
+                  value={values.authorIds}
+                  onChange={handleChange}
+                  label='Authors'
+                  multiple
+                >
+                  {authors.map((author) => (
+                    <MenuItem
+                      value={author.id}
+                      key={author.id}
+                    >{`${author.firstName} ${author.lastName}`}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Stack>
+          </Grid>
 
-      <input
-        id='price'
-        type='price'
-        value={values.price}
-        onChange={handleChange}
-        onBlur={handleBlur}
-      />
+          <Grid item xs={9}>
+            <Stack direction='column' spacing={2}>
+              <FormControl fullWidth>
+                <TextField
+                  name='title'
+                  required
+                  label='Title'
+                  variant='outlined'
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.title}
+                ></TextField>
+                {errors.title && touched.title && (
+                  <div className='error'> {errors.title}</div>
+                )}
+              </FormControl>
 
-      {errors.price && touched.price && (
-        <div className='error'> {errors.price}</div>
-      )}
+              <FormControl fullWidth>
+                <TextField
+                  name='price'
+                  required
+                  label='Price'
+                  variant='outlined'
+                  onChange={handleChange}
+                  value={values.price}
+                ></TextField>
+                {errors.price && touched.price && (
+                  <div className='error'> {errors.price}</div>
+                )}
+              </FormControl>
 
-      <input
-        id='publisher'
-        type='publisher'
-        value={values.publisher}
-        onBlur={handleBlur}
-        onChange={handleChange}
-      />
+              <FormControl fullWidth>
+                <TextField
+                  name='publisher'
+                  required
+                  label='Publisher'
+                  variant='outlined'
+                  onChange={handleChange}
+                  value={values.publisher}
+                ></TextField>
 
-      {errors.publisher && touched.publisher && (
-        <div className='error'> {errors.publisher}</div>
-      )}
+                {errors.publisher && touched.publisher && (
+                  <div className='error'> {errors.publisher}</div>
+                )}
+              </FormControl>
 
-      <div>
-        <input
-          type='radio'
-          name='categoryId'
-          onChange={handleChange}
-          value='1'
-        />
-        <label for='html'>cat-1</label>
-        <br />
-        <input
-          type='radio'
-          name='categoryId'
-          value='2'
-          onChange={handleChange}
-        />
-        <label for='css'>cat-2</label>
-      </div>
-
-      <div>
-        <label>Authors</label>
-        <select name='bookAuthors' onChange={handleChange}>
-          <option value='10'>yazar1</option>
-          <option value='20'>yazar2</option>
-          <option value='30'>yazar3</option>
-          <option value='40'>yazar3</option>
-        </select>
-      </div>
-      <input type='submit' value='submit' />
-      {JSON.stringify(values)}
+              <ButtonGroup>
+                <Button variant='contained' type='submit'>
+                  Add
+                </Button>
+                
+              </ButtonGroup>
+            </Stack>
+          </Grid>
+        </Grid>
+        <SimpleFab url="/admin/books/list" />
+      </Box>
     </form>
   );
 }
