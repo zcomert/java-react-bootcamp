@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import AppContext from "../../context/AppContext";
 import AddAuthor from "./AddAuthor";
 import AddIcon from "@mui/icons-material/Add";
-import { Button, ButtonGroup, Fab, Typography } from "@mui/material";
+import { Avatar, Button, ButtonGroup, Fab, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 import Table from "@mui/material/Table";
@@ -63,6 +63,7 @@ export default function ListAuthor() {
           <TableHead>
             <TableRow>
               <TableCell align='left'>Id</TableCell>
+              <TableCell align='left'>Image</TableCell>
               <TableCell align='left'>First name</TableCell>
               <TableCell align='left'>Last namee</TableCell>
               <TableCell align='left'>Email</TableCell>
@@ -77,6 +78,9 @@ export default function ListAuthor() {
               >
                 <TableCell component='th' scope='row'>
                   {author.id}
+                </TableCell>
+                <TableCell align='left'>
+                  <Avatar src={`/authors/${author.id%20}.jpg`}></Avatar>
                 </TableCell>
                 <TableCell align='left'>{author.firstName}</TableCell>
                 <TableCell align='left'>{author.lastName}</TableCell>
