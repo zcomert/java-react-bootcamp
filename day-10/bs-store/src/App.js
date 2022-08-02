@@ -13,6 +13,7 @@ import SimpleSnackbar from "./components/snackBar/SimpleSnackbar";
 import {useSelector} from "react-redux";
 import UpdateCategory from "./adminpages/categories/UpdateCategory";
 import AddBook from "./adminpages/books/AddBook"
+import Login from "./pages/login/Login";
 
 
 function App() {
@@ -31,6 +32,9 @@ function App() {
         
         <Route path='/admin/authors/list' element={<ListAuthor />} />
         <Route path='/admin/authors/add' element={<AddAuthor />} />
+        
+        <Route path='/auth/login' element={<Login />} />
+
         <Route path='/' element={<Home />} />
       </Routes>
 
