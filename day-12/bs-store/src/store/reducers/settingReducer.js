@@ -33,7 +33,7 @@ export default function settingReducer(
           message: payload.message,
           duration: payload.duration,
           severity: payload.severity,
-          open: payload.open,
+          open: true // payload.open,
         },
       };
     }

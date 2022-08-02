@@ -23,6 +23,7 @@ import BookService from "../../services/BookService";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { postOneBook } from "../../store/actions/bookActions";
+import { showSnackbar } from "../../store/actions/settingActions";
 import { validationSchema } from "./AddBookValidation";
 import SimpleFab from "../../components/fab/SimpleFab";
 export default function AddBook() {
@@ -50,7 +51,11 @@ export default function AddBook() {
       onSubmit: async (values) => {
         console.log(values);
         bookDispatch(postOneBook(values));
-        // navigate("/admin/books/list");
+        bookDispatch(showSnackbar({
+            message:"Book has been added.",
+            severity:"success"
+        }));
+        navigate("/admin/books/list");
       },
     });
 
