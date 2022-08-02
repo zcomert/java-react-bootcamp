@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Button, Grid, Box, Stack, TextField } from "@mui/material";
+import { Button, Grid, Box, Stack, TextField, Container } from "@mui/material";
 import React from "react";
 import { postOneCategory } from "../../store/actions/categoryActions";
 import { useNavigate } from "react-router-dom";
@@ -37,8 +37,8 @@ export default function AddCategory() {
   };
 
   return (
-    <Box 
-    sx={{ m: 3 }}>
+    <Container maxWidth="md">
+    <Box sx={{ m: 3 }}>
       <Stack spacing={3} >
         <TextField
           name='categoryName'
@@ -58,5 +58,6 @@ export default function AddCategory() {
       </Stack>
       <SimpleFab url="/admin/categories/list" />
     </Box>
+    </Container>
   );
 }

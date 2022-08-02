@@ -1,13 +1,14 @@
 import React, { useContext, useState } from "react";
 import AppContext from "../../context/AppContext";
 import AuthorService from "../../services/AuthorService";
-import { Button, Fab, Stack, TextField, Typography } from "@mui/material";
+import { Button, Container, Fab, Stack, TextField, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import SimpleFab from "../../components/fab/SimpleFab";
 
 export default function AddAuthor() {
   const authorService = new AuthorService();
+  
   const { authors, 
     isLoading,
     setIsLoading,
@@ -67,12 +68,8 @@ export default function AddAuthor() {
   
 
   return (
-    <>
-      <Stack
-        alignSelf='center'
-        alignItems='center'
-        sx={{ minWidth: "650px" }}
-        spacing={3}
+    <Container maxWidth='md'>
+      <Stack spacing={3}
       >
         <Typography align='center' gutterBottom variant='h5'>
           Add Author
@@ -105,6 +102,6 @@ export default function AddAuthor() {
       </Stack>
 
       <SimpleFab url="/admin/authors/list"/>
-    </>
+      </Container>
   );
 }
