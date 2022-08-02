@@ -1,9 +1,13 @@
-# 11. Gün 
-- Redux
-  - Actions
-  - Reducers
-- React-Redux
-  - useSelector
-  - useDispatch
-- Redux-DevTools-Extension
-- Redux-Thunk
+# 12. Gün 
+- Admin Pages Designing
+- Snackbar component design
+- Floating action button component design 
+- Formik
+  - useFormik
+  - handleSubmit
+  - handleChange
+  - values
+- Yup
+  - validationSchema
+  - erros
+  - handleBlur
