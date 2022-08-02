@@ -1,8 +1,9 @@
 import { DELETE_ONE_AUTHOR, GET_ALL_AUTHORS, GET_ONE_AUTHOR, POST_ONE_AUTHOR, PUT_ONE_AUTHOR } from "../actions/authorActions";
-import { authors } from "../initialValues/authorItems";
+import { author, authors } from "../initialValues/authorItems";
 
 const initialState = {
-  authors
+  authors,
+  author
 };
 
 export default function authorReducer(state = initialState, { type, payload }) {
@@ -30,7 +31,7 @@ export default function authorReducer(state = initialState, { type, payload }) {
     case PUT_ONE_AUTHOR:{
       return{
         ...state,
-        authors:[...state.authors, payload]
+        authors:[...state.authors.filter(author => author.id!==payload.id), payload]
       };
     }
 
