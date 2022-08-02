@@ -18,6 +18,11 @@ class BookService{
         return await axios.post(this.baseUrl,payload).then(resp => resp.data);
     }
 
+    async putOneBook(id,payload){
+        const url = `${this.baseUrl}/${id}`;
+        return await axios.put(url,payload).then(resp => resp.data);
+    }
+
     async deleteOneBook(id){
         const url = `${this.baseUrl}/${id}`;
         await axios.delete(url).then(resp => resp);
