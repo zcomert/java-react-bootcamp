@@ -5,6 +5,8 @@ import React from "react";
 import { postOneCategory } from "../../store/actions/categoryActions";
 import { useNavigate } from "react-router-dom";
 import { setMessage, showSnackbar } from "../../store/actions/settingActions";
+import SimpleFab from "../../components/fab/SimpleFab";
+
 
 export default function AddCategory() {
   const categoryDispatch = useDispatch();
@@ -54,6 +56,7 @@ export default function AddCategory() {
           Add
         </Button>
       </Stack>
+      <SimpleFab url="/admin/categories/list" />
     </Box>
   );
 }

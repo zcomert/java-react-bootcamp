@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { deleteOneCategory, getAllCategories } from "../../store/actions/categoryActions";
-import AddIcon from "@mui/icons-material/Add";
+
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -13,6 +13,8 @@ import Paper from "@mui/material/Paper";
 import { Button, ButtonGroup, Fab } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { showSnackbar } from "../../store/actions/settingActions";
+import SimpleFab from "../../components/fab/SimpleFab";
+import AddIcon from "@mui/icons-material/Add";
 
 export default function ListCategory() {
   const navigate = useNavigate();
@@ -35,31 +37,11 @@ export default function ListCategory() {
     categoryDispatch(getAllCategories());
   }, []);
 
-  const fabStyle = {
-    position: "fixed",
-    bottom: 16,
-    right: 16,
-  };
-
-  const fab = {
-    color: "secondary",
-    sx: fabStyle,
-    icon: <AddIcon />,
-    label: "Add",
-  };
+  
 
   return (
     <>
-      <Fab
-        sx={fab.sx}
-        aria-label={fab.label}
-        onClick={() => navigate("/admin/categories/add")}
-        color={fab.color}
-      >
-        {fab.icon}
-      </Fab>
-
-      <TableContainer>
+     <TableContainer>
         <Table>
           <TableHead>
             <TableRow>
@@ -89,6 +71,7 @@ export default function ListCategory() {
           </TableBody>
         </Table>
       </TableContainer>
+      <SimpleFab url="/admin/categories/add" />
     </>
   );
 }

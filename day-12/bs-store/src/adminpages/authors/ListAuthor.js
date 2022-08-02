@@ -15,6 +15,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useSelector } from "react-redux";
+import SimpleFab from "../../components/fab/SimpleFab";
 
 export default function ListAuthor() {
   const { theme, pageSize } = useSelector((state) => state.setting);
@@ -51,29 +52,11 @@ export default function ListAuthor() {
     setIsLoading(false);
   };
 
-  const fabStyle = {
-    position: "fixed",
-    bottom: 16,
-    right: 16,
-  };
-
-  const fab = {
-    color: "secondary",
-    sx: fabStyle,
-    icon: <AddIcon />,
-    label: "Add",
-  };
+  
 
   return (
     <div>
-      <Fab
-        sx={fab.sx}
-        aria-label={fab.label}
-        onClick={() => navigate("/admin/authors/add")}
-        color={fab.color}
-      >
-        {fab.icon}
-      </Fab>
+      <SimpleFab url="/admin/authors/add" />
 
       <TableContainer sx={{ m: 1, p: 1 }} component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label='simple table'>

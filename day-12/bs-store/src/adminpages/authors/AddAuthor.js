@@ -4,6 +4,7 @@ import AuthorService from "../../services/AuthorService";
 import { Button, Fab, Stack, TextField, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import SimpleFab from "../../components/fab/SimpleFab";
 
 export default function AddAuthor() {
   const authorService = new AuthorService();
@@ -63,18 +64,7 @@ export default function AddAuthor() {
     });
   };
 
-  const fabStyle = {
-    position: "fixed",
-    bottom: 16,
-    right: 16,
-  };
-
-  const fab = {
-    color: "secondary",
-    sx: fabStyle,
-    icon: <ArrowBackIcon />,
-    label: "Add",
-  };
+  
 
   return (
     <>
@@ -114,14 +104,7 @@ export default function AddAuthor() {
         <Button variant="contained" onClick={handleClick}>Add</Button>
       </Stack>
 
-      <Fab
-        sx={fab.sx}
-        aria-label={fab.label}
-        onClick={() => navigate("/admin/authors/list")}
-        color={fab.color}
-      >
-        {fab.icon}
-      </Fab>
+      <SimpleFab url="/admin/authors/list"/>
     </>
   );
 }
