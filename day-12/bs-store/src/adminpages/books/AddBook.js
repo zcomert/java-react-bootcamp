@@ -18,11 +18,25 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
+import { useFormik } from "formik";
 
 export default function AddBook() {
   const { categories } = useSelector((state) => state.category);
   const { authors } = useSelector((state) => state.author);
   const bookDispatch = useDispatch();
+
+  const { handleSubmit, handleChange, values } = useFormik({
+    initialValues: {
+      title: "",
+      price: "",
+      publisher: "",
+      categoryId: "",
+      bookAuthors: [],
+    },
+    onSubmit: (values) => {
+      console.log(values);
+    }
+  });
 
   useEffect(() => {
     bookDispatch(getAllCategories());
@@ -30,62 +44,37 @@ export default function AddBook() {
   }, []);
 
   return (
-    <form>
-      <Grid sx={{ m: 2 }} container spacing={2}>
-        <Grid item xs={6} md={4}>
-          <FormControl>
-            <FormLabel id='category-label'>Category</FormLabel>
-            <RadioGroup
-              aria-labelledby='category-label'
-              // defaultValue='female'
-              name='radio-buttons-group'
-            >
-              {categories.map((cat) => {
-                const { id, categoryName, description } = cat;
-                return (
-                  <FormControlLabel
-                    key={id}
-                    value={id}
-                    control={<Radio />}
-                    label={categoryName}
-                  />
-                );
-              })}
-            </RadioGroup>
-          </FormControl>
-
-          <FormControl sx={{ m: 1, width: 300 }}>
-            <InputLabel id='demo-multiple-name-label'>Name</InputLabel>
-            <Select
-              labelId='demo-multiple-name-label'
-              id='demo-multiple-name'
-              multiple
-              value={[]}
-              // onChange={handleChange}
-              input={<OutlinedInput label='Name' />}
-              // MenuProps={MenuProps}
-            >
-              {authors.map((author) => (
-                <MenuItem
-                  key={author.id}
-                  value={author.id}
-                  // style={getStyles(name, personName, theme)}
-                >
-                  {author.firstName}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={6} md={8}>
-          <Stack spacing={3}>
-            <TextField name='title'></TextField>
-            <TextField name='price'></TextField>
-            <TextField name='publisher'></TextField>
-            <Button variant='contained'>Add</Button>
-          </Stack>
-        </Grid>
-      </Grid>
+    <form onSubmit={handleSubmit}>
+      <input id="title" type='title' value={values.title} onChange={handleChange} />
+      <input id="price" type='price' value={values.price} onChange={handleChange} />
+      <input id="publisher" type='publisher' value={values.publisher} 
+      onChange={handleChange}
+      />
+      
+      <div>
+        <input 
+        type='radio' 
+        name='categoryId' 
+        onChange={handleChange}
+        value='1' />
+        <label for='html'>cat-1</label>
+        <br />
+        <input type='radio' name='categoryId' value='2' onChange={handleChange} />
+        <label for='css'>cat-2</label>
+       
+      </div>
+      
+      <div>
+        <label>Authors</label>
+        <select name='bookAuthors' onChange={handleChange}>
+          <option value='10'>yazar1</option>
+          <option value='20'>yazar2</option>
+          <option value='30'>yazar3</option>
+          <option value='40'>yazar3</option>
+        </select>
+      </div>
+      <input type="submit" value="submit" />
+      {JSON.stringify(values)}
     </form>
   );
 }
