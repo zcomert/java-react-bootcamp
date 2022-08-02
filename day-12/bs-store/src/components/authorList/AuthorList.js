@@ -8,7 +8,7 @@ export default function AuthorList({ authors }) {
       {authors.map((author) => {
         const { id, firstName, lastName, email } = author;
         return (
-          <Tooltip title={`${firstName} ${lastName}`}>
+          <Tooltip key={id} title={`${firstName} ${lastName}`}>
             <Avatar
               alt={`${firstName} ${lastName}`}
               src={`/authors/${id % 20}.jpg`}

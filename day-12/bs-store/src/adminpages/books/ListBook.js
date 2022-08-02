@@ -12,7 +12,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
-import { getAllBooks } from "../../store/actions/bookActions";
+import { deleteOneBook, getAllBooks } from "../../store/actions/bookActions";
 import AuthorList from "../../components/authorList/AuthorList";
 import {  ButtonGroup, Fab } from "@mui/material";
 import SimpleFab from "../../components/fab/SimpleFab";
@@ -24,6 +24,11 @@ export default function ListBook() {
   useEffect(() => {
     bookDispatch(getAllBooks());
   }, []);
+
+  const handleRemove = (id) => {
+    console.log(id)
+     bookDispatch(deleteOneBook(id));
+  }
 
   return (
     <>
@@ -47,7 +52,7 @@ export default function ListBook() {
               const { id, title, price, publisher, category, bookAuthors } =
                 book;
               return (
-                <TableRow>
+                <TableRow key={id}>
                   <TableCell>{id}</TableCell>
                   <TableCell>
                     <Avatar src={`/books/${id % 121}.jpg`}></Avatar>
@@ -55,14 +60,14 @@ export default function ListBook() {
                   <TableCell>{title}</TableCell>
                   <TableCell>{price}</TableCell>
                   <TableCell>{publisher}</TableCell>
-                  <TableCell>
+                  <TableCell align="center">
                     <AuthorList authors={bookAuthors} />
                   </TableCell>
                   <TableCell>{category.categoryName}</TableCell>
                   <TableCell>
                     <ButtonGroup orientation='vertical'>
                       <Button>Edit</Button>
-                      <Button>
+                      <Button onClick = {() => handleRemove(id)}>
                         Remove
                       </Button>
                     </ButtonGroup>

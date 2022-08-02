@@ -34,7 +34,7 @@ function bookReducer(state = initialState, { type, payload }) {
     case DELETE_ONE_BOOK:
       return {
         ...state,
-        books: books.filter((book) => book.id !== payload),
+        books: state.books.filter((book) => book.id !== payload),
       };
     case PUT_ONE_BOOK:
       return {

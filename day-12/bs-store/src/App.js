@@ -18,6 +18,7 @@ import SimpleSnackbar from "./components/snackBar/SimpleSnackbar";
 
 import {useSelector} from "react-redux";
 import UpdateCategory from "./adminpages/categories/UpdateCategory";
+import AddBook from "./adminpages/books/AddBook";
 
 
 function App() {
@@ -45,6 +46,7 @@ function App() {
 
       <Routes>
         <Route path='/admin/books/list' element={<ListBook />} />
+        <Route path='/admin/books/add' element={<AddBook />} />
         
         <Route path='/admin/categories/list' element={<ListCategory />} />
         <Route path='/admin/categories/add' element={<AddCategory />} />
