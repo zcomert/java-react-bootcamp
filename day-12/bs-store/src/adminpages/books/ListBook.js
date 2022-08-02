@@ -14,6 +14,8 @@ import Paper from "@mui/material/Paper";
 
 import { getAllBooks } from "../../store/actions/bookActions";
 import AuthorList from "../../components/authorList/AuthorList";
+import {  ButtonGroup, Fab } from "@mui/material";
+import SimpleFab from "../../components/fab/SimpleFab";
 
 export default function ListBook() {
   const { books } = useSelector((state) => state.book);
@@ -42,12 +44,13 @@ export default function ListBook() {
           </TableHead>
           <TableBody>
             {books.map((book) => {
-             const {id, title, price, publisher, category, bookAuthors} = book;
+              const { id, title, price, publisher, category, bookAuthors } =
+                book;
               return (
                 <TableRow>
-                  <TableCell>Id</TableCell>
+                  <TableCell>{id}</TableCell>
                   <TableCell>
-                    <Avatar src={`/books/${id%121}.jpg`}></Avatar>
+                    <Avatar src={`/books/${id % 121}.jpg`}></Avatar>
                   </TableCell>
                   <TableCell>{title}</TableCell>
                   <TableCell>{price}</TableCell>
@@ -55,14 +58,22 @@ export default function ListBook() {
                   <TableCell>
                     <AuthorList authors={bookAuthors} />
                   </TableCell>
-                  <TableCell>Categories</TableCell>
-                  <TableCell></TableCell>
+                  <TableCell>{category.categoryName}</TableCell>
+                  <TableCell>
+                    <ButtonGroup orientation='vertical'>
+                      <Button>Edit</Button>
+                      <Button>
+                        Remove
+                      </Button>
+                    </ButtonGroup>
+                  </TableCell>
                 </TableRow>
               );
             })}
           </TableBody>
         </Table>
       </TableContainer>
+      <SimpleFab url="/admin/books/add" />
     </>
   );
 }
