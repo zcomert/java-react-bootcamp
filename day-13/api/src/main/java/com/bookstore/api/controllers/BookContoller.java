@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,7 @@ import com.bookstore.api.services.Abstract.BookService;
 
 @RestController
 @RequestMapping("api/v1/books")
+// @PreAuthorize("hasRole('ROLE_ADMIN')")
 public class BookContoller {
 
     // Logger logger = LoggerFactory.getLogger(BookContoller.class.getName());
@@ -30,6 +32,7 @@ public class BookContoller {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('book:get')")
     public ResponseEntity<?> getAllBooks() {
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -43,6 +46,7 @@ public class BookContoller {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> postOneBook(@RequestBody @Valid BookDtoForPost book) {
         var response = bookService.postOneBook(book);
         return new ResponseEntity<>(response, response.getHttpStatus());
