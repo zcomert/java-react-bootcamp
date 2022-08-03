@@ -1,17 +1,3 @@
-# 12. Gün 
-- Admin Pages Designing
-- Snackbar component design
-- Floating action button component design 
-- Formik
-  - useFormik
-  - handleSubmit
-  - handleChange
-  - values
-- Yup
-  - validationSchema
-  - erros
-  - handleBlur
-
 # 13. Gün 
 - Authentication and Authorization
 - WebSecurityConfigurerAdapter
@@ -32,3 +18,5 @@
 - ApplicationDao
   - ApplicationDao Implementation (FakeApplicationUserDao)
   - ApplicationDao Implementation (UserServiceImp)
+
+![BasicAuthentication](http://www.zafercomert.com/medya/java/SpringSecurityBasicAuth.svg)
