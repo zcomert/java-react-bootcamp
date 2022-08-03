@@ -21,38 +21,39 @@ public class FakeApplicationUserDaoService implements ApplicationUserDao {
 
     @Override
     public Optional<ApplicationUser> selectApplicationUserByUsername(String username) {
-       
-        return Optional.empty();
+
+        return getApplicationUsers()
+                .stream()
+                .filter(applicationUser -> username.equals(applicationUser.getUsername()))
+                .findFirst();
     }
 
-    private List<ApplicationUser> getApplicationUsers(){
-        List<ApplicationUser> applicationUsers = 
-        Lists.newArrayList(
-            new ApplicationUser("admin",
-            passwordEncoder.encode("admin123"),
-            ADMIN.getGrantedAuthorities(),
-            true,
-            true,
-            true,
-            true),
-            
-            new ApplicationUser("editor",
-            passwordEncoder.encode("editor123"),
-            EDITOR.getGrantedAuthorities(),
-            true,
-            true,
-            true,
-            true),
-            
-            new ApplicationUser("user",
-            passwordEncoder.encode("user123"),
-            USER.getGrantedAuthorities(),
-            true,
-            true,
-            true,
-            true)
-        );
+    private List<ApplicationUser> getApplicationUsers() {
+        List<ApplicationUser> applicationUsers = Lists.newArrayList(
+                new ApplicationUser("admin",
+                        passwordEncoder.encode("admin123456"),
+                        ADMIN.getGrantedAuthorities(),
+                        true,
+                        true,
+                        true,
+                        true),
+
+                new ApplicationUser("editor",
+                        passwordEncoder.encode("editor123"),
+                        EDITOR.getGrantedAuthorities(),
+                        true,
+                        true,
+                        true,
+                        true),
+
+                new ApplicationUser("user",
+                        passwordEncoder.encode("user123"),
+                        USER.getGrantedAuthorities(),
+                        true,
+                        true,
+                        true,
+                        true));
         return applicationUsers;
     }
-    
+
 }
