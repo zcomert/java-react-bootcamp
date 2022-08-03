@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 import lombok.RequiredArgsConstructor;
+import static com.bookstore.api.security.ApplicationUserRole.*;
 
 @Configuration
 @EnableWebSecurity
@@ -27,8 +28,9 @@ public class ApplicationSecurityConfig
                 http
                                 .csrf().disable()
                                 .authorizeRequests()
-                                .antMatchers(HttpMethod.GET, "/api/v1/books").hasAnyRole("ADMIN", "EDITOR", "USER")
-                                .antMatchers(HttpMethod.POST, "/api/v1/books").hasAnyRole("ADMIN")
+                                .antMatchers(HttpMethod.GET, "/api/v1/books")
+                                .hasAnyRole(ADMIN.name(), EDITOR.name(), USER.name())
+                                .antMatchers(HttpMethod.POST, "/api/v1/books").hasAnyRole(ADMIN.name())
                                 .anyRequest()
                                 .authenticated()
                                 .and()
@@ -41,19 +43,19 @@ public class ApplicationSecurityConfig
                 UserDetails admin = User.builder()
                                 .username("admin")
                                 .password(passwordEncoder.encode("admin123456"))
-                                .roles("ADMIN")
+                                // .roles(ADMIN.name())
                                 .build();
 
                 UserDetails editor = User.builder()
                                 .username("editor")
                                 .password(passwordEncoder.encode("editor123456"))
-                                .roles("EDITOR")
+                                // .roles(EDITOR.name())
                                 .build();
 
                 UserDetails user = User.builder()
                                 .username("user")
                                 .password(passwordEncoder.encode("user123456"))
-                                .roles("USER")
+                                // .roles(USER.name())
                                 .build();
 
                 return new InMemoryUserDetailsManager(admin, editor, user);
