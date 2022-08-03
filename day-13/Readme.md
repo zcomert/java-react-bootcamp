@@ -18,3 +18,5 @@
 - ApplicationDao
   - ApplicationDao Implementation (FakeApplicationUserDao)
   - ApplicationDao Implementation (UserServiceImp)
+
+![BasicAuthentication](http://www.zafercomert.com/medya/java/SpringSecurityBasicAuth.svg)
