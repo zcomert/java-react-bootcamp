@@ -46,7 +46,7 @@ public class BookContoller {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('book:post')")
     public ResponseEntity<?> postOneBook(@RequestBody @Valid BookDtoForPost book) {
         var response = bookService.postOneBook(book);
         return new ResponseEntity<>(response, response.getHttpStatus());

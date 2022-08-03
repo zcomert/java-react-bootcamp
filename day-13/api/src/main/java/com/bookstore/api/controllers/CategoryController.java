@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +26,7 @@ import com.bookstore.api.services.Abstract.CategoryService;
 
 @RestController
 @RequestMapping("api/v1/categories")
+@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_EDITOR','ROLE_USER')")
 public class CategoryController {
 
     private final CategoryService categoryService;
