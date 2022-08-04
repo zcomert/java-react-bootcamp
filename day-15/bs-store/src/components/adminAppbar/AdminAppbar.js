@@ -133,9 +133,10 @@ const AdminAppbar = () => {
                 {page}
               </Button>
             ))}
+            
           </Box>
           <Box>
-          <Button sx={{color:'#fff'}} onClick={navigate("/auth/login")} >Login</Button>
+            
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
@@ -169,6 +170,13 @@ const AdminAppbar = () => {
             
           </Box>
           <ThemeMenu />
+          <div>
+          <Button
+              key="login"
+              onClick={() => navigate("/auth/login")}
+              sx={{ my: 2, color: "white", display: "block" }}
+              >Login</Button>
+          </div>
 
           
 

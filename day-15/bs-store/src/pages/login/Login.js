@@ -4,9 +4,10 @@ import { useFormik } from "formik";
 import AuthService from "../../services/AuthService";
 import { showSnackbar } from "../../store/actions/settingActions";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 export default function Login() {
   const authService = new AuthService();
-
+  const navigate = useNavigate();
   const authDispatch = useDispatch();
 
   const { handleSubmit, handleChange, values } = useFormik({
@@ -30,6 +31,7 @@ export default function Login() {
               severity: "success",
             })
           );
+          navigate("/home");
         } else {
           authDispatch(
             showSnackbar({
