@@ -57,6 +57,8 @@ public class ApplicationSecurityConfig
                                 .csrf().disable()
                                 .exceptionHandling().authenticationEntryPoint(handler)
                                 .and()
+                                .cors()
+                                .and()
                                 .sessionManagement()
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                                 .and()
