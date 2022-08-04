@@ -37,7 +37,6 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
     private JwtTokenProvider jwtTokenProvider;
     private UserService userService;
-    private PasswordEncoder passwordEncoder;
     private RefreshTokenServiceImp refreshTokenService;
 
     public AuthController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider,
@@ -45,7 +44,6 @@ public class AuthController {
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
         this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
         this.refreshTokenService = refreshTokenService;
 
     }
@@ -95,10 +93,6 @@ public class AuthController {
 
         userService.saveOneUser(user);
 
-        // Adding role -> User role is given by default
-        // userRoleService.Add(user.getId(), 3);
-
-        //
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                 registerRequest.getUserName(),
                 registerRequest.getPassword());
