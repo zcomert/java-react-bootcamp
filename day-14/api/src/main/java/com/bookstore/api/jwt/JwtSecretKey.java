@@ -9,6 +9,7 @@ import io.jsonwebtoken.security.Keys;
 
 @Configuration
 public class JwtSecretKey {
+
     private final JwtConfig jwtConfig;
 
     public JwtSecretKey(JwtConfig jwtConfig) {
@@ -16,7 +17,7 @@ public class JwtSecretKey {
     }
 
     @Bean
-    public SecretKey secretKey(){
+    public SecretKey secretKey() {
         return Keys.hmacShaKeyFor(jwtConfig.getSecretKey().getBytes());
     }
 }

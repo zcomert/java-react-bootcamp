@@ -11,11 +11,12 @@ import lombok.Data;
 @ConfigurationProperties(prefix = "application.jwt")
 @Data
 public class JwtConfig {
+
     private String secretKey;
     private String tokenPrefix;
 
-    @Value("${application.jwt.expire.in}")
-    private Long expireIn;
+    @Value("${application.jwt.expires.in}")
+    private Long expiresIn;
 
     public String getAuthorizationHeader() {
         return HttpHeaders.AUTHORIZATION;
