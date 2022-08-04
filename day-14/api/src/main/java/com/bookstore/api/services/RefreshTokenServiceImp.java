@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.bookstore.api.entities.RefreshToken;
 import com.bookstore.api.entities.User;
+import com.bookstore.api.entities.models.ApiResponse;
 import com.bookstore.api.repositories.RefreshTokenRepository;
 import com.bookstore.api.services.Abstract.RefreshTokenService;
 
@@ -24,7 +25,7 @@ public class RefreshTokenServiceImp implements RefreshTokenService {
         this.refreshTokenRepository = refreshTokenRepository;
     }
 
-    public String createRefreshToken(User user) {
+    public ApiResponse<String> createRefreshToken(User user) {
         RefreshToken token = refreshTokenRepository.findByUserId(user.getId());
         if (token == null) {
             token = new RefreshToken();
@@ -33,14 +34,15 @@ public class RefreshTokenServiceImp implements RefreshTokenService {
         token.setToken(UUID.randomUUID().toString());
         token.setExpiryDate(Date.from(Instant.now().plusSeconds(expireSeconds)));
         refreshTokenRepository.save(token);
-        return token.getToken();
+        return ApiResponse.default_OK(token.getToken());
     }
 
-    public boolean isRefreshExpired(RefreshToken token) {
-        return token.getExpiryDate().before(new Date());
+    public ApiResponse<Boolean> isRefreshExpired(RefreshToken token) {
+        Boolean isExpired = token.getExpiryDate().before(new Date());
+        return ApiResponse.default_OK(isExpired);
     }
 
-    public RefreshToken getByUser(int userId) {
-        return refreshTokenRepository.findByUserId(userId);
+    public ApiResponse<RefreshToken> getByUser(int userId) {
+        return ApiResponse.default_OK(refreshTokenRepository.findByUserId(userId));
     }
 }

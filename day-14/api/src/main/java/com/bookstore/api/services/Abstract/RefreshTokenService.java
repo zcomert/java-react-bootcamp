@@ -2,11 +2,13 @@ package com.bookstore.api.services.Abstract;
 
 import com.bookstore.api.entities.RefreshToken;
 import com.bookstore.api.entities.User;
+import com.bookstore.api.entities.models.ApiResponse;
 
 public interface RefreshTokenService {
-    String createRefreshToken(User user);
 
-    boolean isRefreshExpired(RefreshToken token);
+    ApiResponse<String> createRefreshToken(User user);
 
-    RefreshToken getByUser(int userId);
+    ApiResponse<Boolean> isRefreshExpired(RefreshToken token);
+
+    ApiResponse<RefreshToken> getByUser(int userId);
 }
