@@ -25,7 +25,7 @@ import com.bookstore.api.entities.dto.RefreshDto;
 import com.bookstore.api.entities.dto.UserRequest;
 import com.bookstore.api.entities.dto.UserRequestForRegister;
 import com.bookstore.api.jwt.JwtTokenProvider;
-import com.bookstore.api.services.RefreshTokenService;
+import com.bookstore.api.services.RefreshTokenServiceImp;
 import com.bookstore.api.services.Abstract.UserService;
 
 @RestController
@@ -37,10 +37,10 @@ public class AuthController {
     private JwtTokenProvider jwtTokenProvider;
     private UserService userService;
     private PasswordEncoder passwordEncoder;
-    private RefreshTokenService refreshTokenService;
+    private RefreshTokenServiceImp refreshTokenService;
 
     public AuthController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider,
-            UserService userService, PasswordEncoder passwordEncoder, RefreshTokenService refreshTokenService) {
+            UserService userService, PasswordEncoder passwordEncoder, RefreshTokenServiceImp refreshTokenService) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
         this.userService = userService;

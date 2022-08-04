@@ -10,16 +10,17 @@ import org.springframework.stereotype.Service;
 import com.bookstore.api.entities.RefreshToken;
 import com.bookstore.api.entities.User;
 import com.bookstore.api.repositories.RefreshTokenRepository;
+import com.bookstore.api.services.Abstract.RefreshTokenService;
 
 @Service
-public class RefreshTokenService {
+public class RefreshTokenServiceImp implements RefreshTokenService {
 
     @Value("${application.jwt.refresh.token.expires.in}")
     Long expireSeconds;
 
     private RefreshTokenRepository refreshTokenRepository;
 
-    public RefreshTokenService(RefreshTokenRepository refreshTokenRepository) {
+    public RefreshTokenServiceImp(RefreshTokenRepository refreshTokenRepository) {
         this.refreshTokenRepository = refreshTokenRepository;
     }
 
