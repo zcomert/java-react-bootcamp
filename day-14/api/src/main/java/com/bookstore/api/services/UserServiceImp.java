@@ -95,31 +95,47 @@ public class UserServiceImp implements UserService {
         roles.add(role);
         user.setRoles(roles);
         userRepository.save(user);
-        return ApiResponse.default_OK(user);
+        return ApiResponse.default_CREATED(user);
     }
 
     @Override
     public ApiResponse<User> putOneUser(int id, User user) {
-        // TODO Auto-generated method stub
-        return null;
+
+        User updatedUser = getOneUser(id).getData();
+        // dto gelecek...
+        updatedUser.setFirstName(user.getFirstName());
+        updatedUser.setLastName(user.getLastName());
+
+        // Roles
+        Set<Role> roles = roleRepository.findByIdIn(user.getRoles());
+        updatedUser.setRoles(roles);
+
+        userRepository.save(updatedUser);
+
+        return ApiResponse.default_ACCEPTED(updatedUser);
     }
 
     @Override
     public User getOneUserByUserName(String username) {
-        // TODO Auto-generated method stub
-        return null;
+        return userRepository.findByUserName(username);
     }
 
     @Override
     public void deleteOneUser(int id) {
-        // TODO Auto-generated method stub
-
+        getOneUser(id);
+        userRepository.deleteById(id);
     }
 
     @Override
     public User saveOneUser(User user) {
-        // TODO Auto-generated method stub
-        return null;
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        Set<Role> roles = new HashSet<>();
+        Role role = roleRepository.findByName("USER");
+        roles.add(role);
+        user.setRoles(roles);
+
+        return userRepository.save(user);
     }
 
 }
