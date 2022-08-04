@@ -16,11 +16,18 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
+import com.bookstore.api.jwt.JwtAuthenticationEntryPoint;
+import com.bookstore.api.jwt.JwtAuthenticationFilter;
 import com.bookstore.api.services.ApplicationUserService;
 
 import lombok.RequiredArgsConstructor;
 import static com.bookstore.api.security.ApplicationUserRole.*;
 import static com.bookstore.api.security.ApplicationUserPermission.*;
+
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.config.BeanIds;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 
 @Configuration
 @EnableWebSecurity
@@ -31,17 +38,34 @@ public class ApplicationSecurityConfig
 
         private final PasswordEncoder passwordEncoder;
         private final ApplicationUserService applicationUserService;
+        private final JwtAuthenticationEntryPoint handler;
+
+        @Bean(BeanIds.AUTHENTICATION_MANAGER)
+        @Override
+        public AuthenticationManager authenticationManagerBean() throws Exception {
+                return super.authenticationManagerBean();
+        }
+
+        @Bean
+        public JwtAuthenticationFilter jwtAuthenticationFilter() {
+                return new JwtAuthenticationFilter();
+        }
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
                 http
                                 .csrf().disable()
-                                .authorizeRequests()
-                                .antMatchers("/api/v1/**").permitAll()
-                                .anyRequest()
-                                .authenticated()
+                                .exceptionHandling().authenticationEntryPoint(handler)
                                 .and()
-                                .httpBasic();
+                                .sessionManagement()
+                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                                .and()
+                                .authorizeRequests()
+                                .antMatchers("/", "index", "/css/*", "/js/*").permitAll()
+                                .antMatchers("/api/v1/auth/**").permitAll()
+                                .antMatchers("/api/**").permitAll()
+                                .anyRequest()
+                                .authenticated();
         }
 
         @Override
@@ -55,4 +79,5 @@ public class ApplicationSecurityConfig
                 provider.setUserDetailsService(applicationUserService);
                 return provider;
         }
+
 }
