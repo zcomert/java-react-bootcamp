@@ -3,9 +3,9 @@ package com.bookstore.api.entities.dto;
 import lombok.Data;
 
 @Data
-public class AuthResponse {
-    private String message;
+public class AuthDto {
 
+    private String message;
     private int userId;
     private String userName;
 

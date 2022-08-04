@@ -176,3 +176,34 @@
   - validationSchema
   - erros
   - handleBlur
+
+# 13. Gün 
+- Authentication and Authorization
+- WebSecurityConfigurerAdapter
+- UserDetails
+- UserDetailsService
+- InMemoryUserDetailsManager
+- PasswordEncoder
+- httpBasic
+- Guava Utility Library
+- CSRF
+- Basic Authentication
+- Permission-based Authentication
+- PreAuthorization
+- EnableGlobalMethodSecurity
+- antMatchers
+- UserDetails Implementation (ApplicationUser)
+- UserDetailsService Implementation (ApplicationUserService)
+- ApplicationDao
+  - ApplicationDao Implementation (FakeApplicationUserDao)
+  - ApplicationDao Implementation (UserServiceImp)
+
+# 14. Gün 
+- JWT
+- JwtConfig
+- JwtSecretKey
+- JsonTokenProvider
+- JsonAuthenticationFilter
+- JwtAuthenticationEntryPoint
+- sessionCreationPolicy
+- JwtAuthenticationFilter

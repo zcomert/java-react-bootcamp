@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bookstore.api.entities.RefreshToken;
 import com.bookstore.api.entities.User;
-import com.bookstore.api.entities.dto.AuthResponse;
-import com.bookstore.api.entities.dto.RefreshRequest;
+import com.bookstore.api.entities.dto.AuthDto;
+import com.bookstore.api.entities.dto.RefreshDto;
 import com.bookstore.api.entities.dto.UserRequest;
 import com.bookstore.api.entities.dto.UserRequestForRegister;
 import com.bookstore.api.jwt.JwtTokenProvider;
@@ -50,7 +50,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public AuthResponse login(@RequestBody UserRequest loginRequest) {
+    public AuthDto login(@RequestBody UserRequest loginRequest) {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                 loginRequest.getUserName(),
                 loginRequest.getPassword());
@@ -63,7 +63,7 @@ public class AuthController {
 
         User user = userService.getOneUserByUserName(loginRequest.getUserName());
 
-        AuthResponse authResponse = new AuthResponse();
+        AuthDto authResponse = new AuthDto();
         authResponse.setAccessToken("Bearer " + jwtToken);
         authResponse.setRefreshToken(refreshTokenService.createRefreshToken(user));
         authResponse.setUserId(user.getId());
@@ -75,9 +75,9 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody UserRequestForRegister registerRequest) {
+    public ResponseEntity<AuthDto> register(@RequestBody UserRequestForRegister registerRequest) {
 
-        AuthResponse authResponse = new AuthResponse();
+        AuthDto authResponse = new AuthDto();
 
         // User exists?
         if (userService.getOneUserByUserName(registerRequest.getUserName()) != null) {
@@ -91,8 +91,6 @@ public class AuthController {
         user.setLastName(registerRequest.getLastName());
         user.setUserName(registerRequest.getUserName());
         user.setPassword(registerRequest.getPassword());
-
-        
 
         userService.saveOneUser(user);
 
@@ -120,8 +118,8 @@ public class AuthController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<AuthResponse> refresh(@RequestBody RefreshRequest refreshRequest) {
-        AuthResponse authResponse = new AuthResponse();
+    public ResponseEntity<AuthDto> refresh(@RequestBody RefreshDto refreshRequest) {
+        AuthDto authResponse = new AuthDto();
 
         RefreshToken token = refreshTokenService.getByUser(refreshRequest.getUserId());
 
