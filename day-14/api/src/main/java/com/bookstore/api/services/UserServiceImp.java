@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import com.bookstore.api.entities.Role;
@@ -23,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Repository("mysql")
 public class UserServiceImp implements UserService {
 
     private final UserRepository userRepository;

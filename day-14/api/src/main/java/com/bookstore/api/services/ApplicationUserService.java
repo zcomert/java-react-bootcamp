@@ -1,5 +1,5 @@
-import org.springframework.beans.factory.annotation.Qualifier;
 package com.bookstore.api.services;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

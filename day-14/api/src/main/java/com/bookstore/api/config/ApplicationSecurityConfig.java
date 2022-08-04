@@ -37,6 +37,7 @@ public class ApplicationSecurityConfig
                 http
                                 .csrf().disable()
                                 .authorizeRequests()
+                                .antMatchers("/api/v1/**").hasRole(ADMIN.name())
                                 .antMatchers("/api/v1/**").permitAll()
                                 .anyRequest()
                                 .authenticated()

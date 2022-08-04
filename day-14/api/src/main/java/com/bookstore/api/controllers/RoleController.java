@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("api/v1/roles")
 @RequiredArgsConstructor
 public class RoleController {
-    private RoleService roleService;
+    private final RoleService roleService;
 
     @GetMapping
     public ResponseEntity<?> getAllRoles() {
