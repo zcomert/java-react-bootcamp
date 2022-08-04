@@ -88,14 +88,14 @@ public class UserServiceImp implements UserService {
 
     @Override
     public ApiResponse<User> postOneUser(User user) {
-        // passwordEncode
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-        // Role: varsayılan olarak USER role atayalım.
         Set<Role> roles = new HashSet<>();
         Role role = roleRepository.findByName("USER");
+        if (role == null) {
+            throw new RuntimeException("USER role is not defined.");
+        }
         roles.add(role);
         user.setRoles(roles);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         return ApiResponse.default_CREATED(user);
     }

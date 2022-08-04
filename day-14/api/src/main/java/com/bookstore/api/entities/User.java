@@ -1,5 +1,6 @@
 package com.bookstore.api.entities;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -14,35 +15,31 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
 @Entity
+@Data
 @Table(name = "users")
-@NoArgsConstructor
-@AllArgsConstructor
 public class User {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
-    private int id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    int id;
 
     @Column(name = "user_name")
-    private String userName;
+    String userName;
 
     @Column(name = "password")
-    private String password;
+    String password;
 
     @Column(name = "first_name")
-    private String firstName;
+    String firstName;
 
     @Column(name = "last_name")
-    private String lastName;
+    String lastName;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
-
+    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
 }
