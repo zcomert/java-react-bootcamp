@@ -44,14 +44,14 @@ public class UserServiceImp implements UserService {
         // Bu uygulamada biz sadece 1 kayıt tutuyoruz. Ancak altyapı birden fazla role
         // tanımı yapmaya uygun!
         for (Role role : roles) {
-            switch (role.getId()) {
-                case 1: // USER
+            switch (role.getName()) { // role.getName()
+                case "USER": // USER
                     grantedAuthorities.addAll(USER.getGrantedAuthorities());
                     break;
-                case 2: // EDITOR
+                case "EDITOR": // EDITOR  /// "EDITOR"
                     grantedAuthorities.addAll(EDITOR.getGrantedAuthorities());
                     break;
-                case 3: // ADMIN
+                case "ADMIN": // ADMIN
                     grantedAuthorities.addAll(ADMIN.getGrantedAuthorities());
                     break;
                 default:
