@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,18 +45,21 @@ public class CategoryController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('category:post')")
     public ResponseEntity<?> postOneCategory(@RequestBody Category category) {
         var response = categoryService.postOneCategory(category);
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('category:put')")
     public ResponseEntity<?> putOneCategory(@PathVariable(name = "id") int id, @RequestBody Category category) {
         var response = categoryService.putOneCategory(id, category);
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('category:delete')")
     public ResponseEntity<Void> deleteOneCategory(@PathVariable(name = "id") int id) {
         categoryService.deleteCategory(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

@@ -18,21 +18,17 @@ import com.bookstore.api.entities.dto.BookDtoForPost;
 import com.bookstore.api.entities.dto.BookDtoForPut;
 import com.bookstore.api.services.Abstract.BookService;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping("api/v1/books")
-// @PreAuthorize("hasRole('ROLE_ADMIN')")
+@RequiredArgsConstructor
 public class BookContoller {
-
-    // Logger logger = LoggerFactory.getLogger(BookContoller.class.getName());
 
     private final BookService bookService;
 
-    public BookContoller(BookService bookService) {
-        this.bookService = bookService;
-    }
-
     @GetMapping
-    @PreAuthorize("hasAuthority('book:get')")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<?> getAllBooks() {
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -40,25 +36,28 @@ public class BookContoller {
     }
 
     @GetMapping(path = "/{id}")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<?> getOneBook(@PathVariable(name = "id", required = true) int id) {
         var response = bookService.getOneBook(id);
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('book:post')")
     public ResponseEntity<?> postOneBook(@RequestBody @Valid BookDtoForPost book) {
         var response = bookService.postOneBook(book);
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
     @PutMapping(path = "/{id}")
+    @PreAuthorize("hasAuthority('book:put')")
     public ResponseEntity<?> putOneBook(@PathVariable(name = "id", required = true) int id,
             @RequestBody BookDtoForPut request) {
         return new ResponseEntity<>(bookService.putOneBook(id, request), HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping(path = "/{id}")
+    @PreAuthorize("hasAuthority('book:delete')")
     public ResponseEntity<?> deleteOneBook(@PathVariable int id) {
         bookService.deleteOneBook(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

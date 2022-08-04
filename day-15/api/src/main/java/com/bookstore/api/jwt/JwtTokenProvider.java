@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.crypto.SecretKey;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -28,6 +29,7 @@ public class JwtTokenProvider {
     private final JwtConfig jwtConfig;
     private final SecretKey secretKey;
     private final UserService userService;
+    private final ModelMapper mapper;
 
     public String generateJwtToken(Authentication auth) {
 
@@ -44,7 +46,8 @@ public class JwtTokenProvider {
 
     public String generateJwtTokenByUserId(int userId) {
 
-        User user = userService.getOneUser(userId).getData();
+        User user = mapper.map(userService.getOneUser(userId).getData(), User.class);
+
         ApplicationUser userDetails = userService.selectApplicationUserByUsername(user.getUserName())
                 .orElseThrow(() -> new UserNotFoundException(userId));
 

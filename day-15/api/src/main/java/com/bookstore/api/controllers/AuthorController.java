@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,12 +47,14 @@ public class AuthorController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('author:post')")
     public ResponseEntity<?> postOneAuthor(@RequestBody @Valid Author author) {
         var apiResponse = authorService.postOneAuthor(author);
         return new ResponseEntity<>(apiResponse, apiResponse.getHttpStatus());
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('author:put')")
     public ResponseEntity<?> putOneAuthor(@PathVariable(name = "id", required = true) int id,
             @RequestBody Author author) {
 
@@ -64,6 +67,7 @@ public class AuthorController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('author:delete')")
     public ResponseEntity<Void> deleteOneAuthor(@PathVariable("id") int id) {
         authorService.deleteOneAuthor(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
