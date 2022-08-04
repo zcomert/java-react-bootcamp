@@ -14,36 +14,31 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "refresh_token")
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class RefreshToken {
     @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    int id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
-    private User user;
+    User user;
 
-    @Column(name = "token", nullable = false, unique = true)
-    private String token;
+    @Column(nullable = false, unique = true)
+    String token;
 
-    @Column(name = "expiry_date", nullable = false)
+    @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    private Date expiryDate;
+    Date expiryDate;
 }

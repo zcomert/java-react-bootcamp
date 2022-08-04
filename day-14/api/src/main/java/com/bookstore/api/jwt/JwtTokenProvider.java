@@ -1,6 +1,9 @@
 package com.bookstore.api.jwt;
 
+import java.security.Key;
 import java.util.Date;
+
+import javax.crypto.SecretKey;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -11,49 +14,56 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
 
 @Component
 public class JwtTokenProvider {
-    private final JwtConfig jwtConfig;
-    private final JwtSecretKey secretKey;
 
-    public JwtTokenProvider(JwtConfig jwtConfig, JwtSecretKey secretKey) {
+    private final JwtConfig jwtConfig;
+    private final SecretKey secretKey;
+
+    public JwtTokenProvider(JwtConfig jwtConfig, SecretKey secretKey) {
         this.jwtConfig = jwtConfig;
         this.secretKey = secretKey;
+        System.out.println(jwtConfig.getExpiresIn());
     }
 
     public String generateJwtToken(Authentication auth) {
+
         ApplicationUser userDetails = (ApplicationUser) auth.getPrincipal();
+
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
                 .claim("authorities", userDetails.getAuthorities())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime() + jwtConfig.getExpiresIn()))
-                .signWith(secretKey.secretKey()) // ?
+                .signWith(secretKey)
                 .compact();
     }
 
-    public String generateTokenByUserName(String username) {
+    public String generateJwtTokenByUserId(int userId) {
+
+        Date expireDate = new Date(new Date().getTime() + jwtConfig.getExpiresIn());
+        return Jwts.builder()
+                .setSubject(Integer.toString(userId))
+                .setIssuedAt(new Date())
+                .setExpiration(expireDate)
+                .signWith(secretKey)
+                .compact();
+    }
+
+    public String generateJwtTokenByUserName(String username) {
         Date expireDate = new Date(new Date().getTime() + jwtConfig.getExpiresIn());
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(expireDate)
-                .signWith(secretKey.secretKey())
+                .signWith(secretKey)
                 .compact();
     }
 
-    public String generateTokenByUserId(int id) {
-        Date expireDate = new Date(new Date().getTime() + jwtConfig.getExpiresIn());
-        return Jwts.builder()
-                .setSubject(Integer.toString(id))
-                .setExpiration(expireDate)
-                .signWith(secretKey.secretKey())
-                .compact();
-    }
-
-    String getUserNameFromJwt(String token) {
+    String getUsernameFromJwt(String token) {
         Claims claims = getJwtBody(token);
         return claims.getSubject();
     }
@@ -61,7 +71,7 @@ public class JwtTokenProvider {
     boolean validateToken(String token) {
         try {
             getJwtBody(token);
-            return isTokenExpired(token);
+            return !isTokenExpired(token);
         } catch (MalformedJwtException e) {
             return false;
         } catch (ExpiredJwtException e) {
@@ -73,16 +83,16 @@ public class JwtTokenProvider {
         }
     }
 
-    private boolean isTokenExpired(String token) {
+    boolean isTokenExpired(String token) {
         Date expiration = getJwtBody(token).getExpiration();
         return expiration.before(new Date());
     }
 
     private Claims getJwtBody(String token) {
+
         return Jwts.parser()
-                .setSigningKey(secretKey.secretKey())
+                .setSigningKey(secretKey)
                 .parseClaimsJws(token)
                 .getBody();
     }
-
 }
