@@ -33,7 +33,7 @@ export default function Login() {
               severity: "success",
             })
           );
-          navigate("/home");
+          navigate("/books");
         } else {
           authDispatch(
             showSnackbar({
