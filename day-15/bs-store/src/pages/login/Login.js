@@ -5,6 +5,7 @@ import AuthService from "../../services/AuthService";
 import { showSnackbar } from "../../store/actions/settingActions";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import {logIn} from "../../store/actions/authActions";
 export default function Login() {
   const authService = new AuthService();
   const navigate = useNavigate();
@@ -17,8 +18,11 @@ export default function Login() {
     },
     onSubmit: async (values) => {
       console.log(values);
+      authDispatch(logIn(values));
       authService.login(values).then((resp) => {
         if (resp !== 401) {
+          
+         
           console.log(resp);
           localStorage.setItem("userId", resp.userId);
           localStorage.setItem("firstName", resp.firstName);
