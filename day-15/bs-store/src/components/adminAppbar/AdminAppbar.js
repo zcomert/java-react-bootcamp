@@ -48,6 +48,24 @@ const AdminAppbar = () => {
     setAnchorElUser(null);
   };
 
+  const loginAndLogoutButton = authItems?.isLogin ? (
+    <Button
+      key='login'
+      onClick={() => navigate("/")}
+      sx={{ my: 2, color: "white", display: "block" }}
+    >
+      Logout
+    </Button>
+  ) : (
+    <Button
+      key='login'
+      onClick={() => navigate("/auth/login")}
+      sx={{ my: 2, color: "white", display: "block" }}
+    >
+      Login
+    </Button>
+  );
+
   return (
     <AppBar position='static'>
       <Container maxWidth='xl'>
@@ -173,15 +191,7 @@ const AdminAppbar = () => {
 
           <ThemeMenu />
 
-          <div>
-            <Button
-              key='login'
-              onClick={() => navigate("/auth/login")}
-              sx={{ my: 2, color: "white", display: "block" }}
-            >
-              Login
-            </Button>
-          </div>
+          <div>{loginAndLogoutButton}</div>
         </Toolbar>
       </Container>
     </AppBar>
