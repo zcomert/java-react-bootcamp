@@ -9,11 +9,12 @@ function authReducer(state={}, { type, payload }) {
   
   switch (type) {
     case LOGIN:
+      console.log("reducer")
       return {
         ...state,
-        authItems: {
-         payload
-        },
+        authItems:{
+          ...payload
+        }
       };
 
     default:

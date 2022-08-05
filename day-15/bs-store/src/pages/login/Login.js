@@ -21,9 +21,7 @@ export default function Login() {
       authDispatch(logIn(values));
       authService.login(values).then((resp) => {
         if (resp !== 401) {
-          
-         
-          console.log(resp);
+          // console.log(resp);
           localStorage.setItem("userId", resp.userId);
           localStorage.setItem("firstName", resp.firstName);
           localStorage.setItem("lastName", resp.lastName);
