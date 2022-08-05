@@ -13,7 +13,8 @@ function authReducer(state={}, { type, payload }) {
       return {
         ...state,
         authItems:{
-          ...payload
+          ...payload,
+          isLogin:true
         }
       };
 

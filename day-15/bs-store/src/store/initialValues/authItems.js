@@ -5,4 +5,5 @@ export const authItems = {
   lastName: "",
   accessToken: "",
   refreshToken: "",
+  isLogin:false
 };
