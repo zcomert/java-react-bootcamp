@@ -43,7 +43,7 @@ export default function ThemeMenu() {
         }}
       >
         <MenuItem onClick={() => handleClose('theme1')}>Dragon</MenuItem>
-        <MenuItem onClick={() => handleClose('theme2')}>Blue Sky</MenuItem>
+        <MenuItem onClick={() => handleClose('theme2')}>Purple Sky</MenuItem>
         <MenuItem onClick={() => handleClose('theme3')}>Spring</MenuItem>
       </Menu>
     </div>
