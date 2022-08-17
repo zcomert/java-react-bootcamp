@@ -21,6 +21,8 @@ import UpdateCategory from "./adminpages/categories/UpdateCategory";
 import AddBook from "./adminpages/books/AddBook";
 import Login from "./pages/login/Login";
 import BookList from "./pages/book/BookList";
+import CategoryList from "./pages/category/CategoryList";
+import AuthorList from "./pages/author/AuthorList";
 
 
 function App() {
@@ -60,6 +62,8 @@ function App() {
         <Route path="/auth/login" element={<Login />} />
 
         <Route path="/books" element={<BookList />} />
+        <Route path="/categories" element={<CategoryList />} />
+        <Route path="/authors" element={<AuthorList />} />
 
         <Route path='/' element={<Home />} />
       </Routes>

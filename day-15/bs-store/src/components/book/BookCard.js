@@ -36,11 +36,7 @@ export default function BookCard({book}) {
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardHeader
-        action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
-        }
+    
         title={book.title}
         subheader={book.publisher}
         sx={{minHeight: 80}}
@@ -49,25 +45,23 @@ export default function BookCard({book}) {
         component="img"
         height="194"
         image={`/books/${book.id%120}.jpg`}
-        alt="Paella dish"
+        alt="book image"
         sx={{ objectFit: "contain" }}
       />
       <CardContent sx={{minHeight: 80}}>
       {book.bookAuthors.map((authors) => {
           return (
-            <Typography variant="body2" color="text.secondary" align="center" justifySelf={"center"}>
-              {authors.firstName} {authors.lastName}
-            </Typography>
+            <Typography align='center'>{authors.firstName} {authors.lastName}</Typography>
           );
         })}
+      <Typography paragraph>{book.price} TL</Typography>
+      
       </CardContent>
       <CardActions disableSpacing>
         <IconButton aria-label="add to favorites">
           <FavoriteIcon />
         </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
-        </IconButton>
+        
         <ExpandMore
           expand={expanded}
           onClick={handleExpandClick}
@@ -78,9 +72,9 @@ export default function BookCard({book}) {
         </ExpandMore>
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent>
-        <Typography paragraph>{book.category.categoryName}</Typography>
-          <Typography paragraph>{book.category.description}</Typography>
+        <CardContent>               
+          <Typography paragraph>Category: {book.category.categoryName}</Typography>
+          <Typography paragraph>Description: {book.category.description}</Typography>
         </CardContent>
       </Collapse>
     </Card>

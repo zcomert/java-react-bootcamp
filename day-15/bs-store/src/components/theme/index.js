@@ -1,5 +1,5 @@
 import { createTheme, ThemeProvider } from "@mui/material";
-import { blue, brown, green, red, yellow } from "@mui/material/colors";
+import { brown, green, purple, red, yellow, blue } from "@mui/material/colors";
 
 const theme1 = createTheme({
   palette: {
@@ -10,8 +10,8 @@ const theme1 = createTheme({
 
 const theme2 = createTheme({
   palette: {
-    primary: blue,
-    secondary: yellow,
+    primary: purple,
+    secondary: blue,
   },
 });
 
